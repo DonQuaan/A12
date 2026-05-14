@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/qvjz8QFW/Logo.png" />
+    <title>Thanh Xuân Của Chúng Ta - Kỷ Yếu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body style="overflow: hidden;">
+    <div id="gatekeeper" class="gatekeeper-overlay">
+        <div class="gate-card">
+            <img src="style/question/CauHoi.jpg" class="gate-img" alt="Câu hỏi">
+            <p class="gate-question">Biệt danh của lớp trưởng là gì?</p>
+            <div class="gate-options">
+                <button class="gate-btn" data-answer="A">A. Đại Ca</button>
+                <button class="gate-btn" data-answer="B">B. Bé Điệu</button>
+                <button class="gate-btn" data-answer="C">C. Sư Tử</button>
+                <button class="gate-btn" data-answer="D">D. Boss</button>
+            </div>
+        </div>
+
+        <div id="gateAlert" class="gate-alert">
+            <div class="alert-content">
+                <img id="alertGif" src="" alt="Alert Animation" class="alert-img">
+                <p id="alertMsg"></p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music"></audio>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Thanh Xuân</a>
+            <ul class="nav-links">
+                <li><a href="#home">Trang chủ</a></li>
+                <li><a href="#members">Thành viên</a></li>
+                <li><a href="#gallery">Khoảnh khắc</a></li>
+                <li><a href="#timeline">Dòng thời gian</a></li>
+                <li><a href="#guestbook">Lưu bút</a></li>
+                <li><a href="javascript:void(0)" id="musicMenu">Nhạc</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-bg"
+            style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('style/img/AnhTapThe/Anh (1).jpg');">
+        </div>
+        <div class="sunlight"></div>
+        <div class="particles" id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="handwritten-title animate-up">Thanh Xuân Của Chúng Ta</h1>
+            <p class="hero-subtitle animate-up-delay">"Những năm tháng rực rỡ dưới mái trường thân yêu"</p>
+            <a href="#members" class="btn btn-primary animate-up-delay-2">Khám phá kỷ niệm</a>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <section id="members" class="section members">
+        <div class="container">
+            <h2 class="section-title">Thành Viên</h2>
+            <div class="member-grid" id="memberGrid">
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="btn btn-outline">Xem thêm<i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section gallery">
+        <div class="container">
+            <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
+            <div class="gallery-grid" id="galleryGrid">
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="section timeline">
+        <div class="container">
+            <h2 class="section-title">Dòng Thời Gian</h2>
+            <div class="timeline-container" id="timelineList">
+                <div class="timeline-line"></div>
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreTimeline" class="btn btn-outline">Xem thêm<i
+                        class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="video" class="section video-section">
+        <div class="container">
+            <h2 class="section-title">Phim Ngắn Kỷ Niệm</h2>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <!-- 
+                    <iframe width="100%" height="100%"
+                        src="https://www.youtube.com/embed/X_VJg_fKz7o?list=RDX_VJg_fKz7o" title="Kỷ yếu lớp"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                    -->
+                    <video width="100%" height="100%" controls loop muted>
+                        <source src="style/video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="guestbook" class="section guestbook">
+        <div class="container">
+            <h2 class="section-title">Những Lời Nhắn Nhủ</h2>
+            <div class="sticky-notes-container" id="stickyNotes">
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreGuestbook" class="btn btn-outline">Xem thêm<i
+                        class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <div id="galleryModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <button id="prevBtn" class="modal-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="nextBtn" class="modal-nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="modal-main-content">
+            <img class="modal-content" id="modalImg">
+            <div id="caption"></div>
+
+            <div class="reaction-container">
+                <div class="reaction-item" data-emoji="👍">👍</div>
+                <div class="reaction-item" data-emoji="❤️">❤️</div>
+                <div class="reaction-item" data-emoji="🥰">🥰</div>
+                <div class="reaction-item" data-emoji="😂">😂</div>
+                <div class="reaction-item" data-emoji="🥹">🥹</div>
+                <div class="reaction-item" data-emoji="😡">😡</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal profile-modal">
+        <div class="modal-card">
+            <span class="close-profile">&times;</span>
+            <div class="profile-header">
+                <img id="profileImg" src="" alt="">
+                <div class="profile-info">
+                    <h3 id="profileName">Tên học sinh</h3>
+                    <p id="profileNickname" class="nickname">Nickname</p>
+                </div>
+            </div>
+            <div class="profile-body">
+                <div class="profile-field">
+                    <i class="fas fa-heart"></i>
+                    <div>
+                        <strong>Sở thích:</strong>
+                        <span id="profileHobbies">...</span>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <i class="fas fa-comment-dots"></i>
+                    <div>
+                        <strong>Lời nhắn:</strong>
+                        <span id="profileMessage">"Thanh xuân như một tách trà..."</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Music Modal (Music Player UI) -->
+    <div id="musicModal" class="modal profile-modal">
+        <div class="modal-card">
+            <span class="close-music">&times;</span>
+            
+            <div class="music-player-header">
+                <div class="album-disc" id="playerDisc">
+                    <img src="style/sound/Anh (1).jpg" id="currentAlbumArt" alt="Album Art">
+                </div>
+                <div class="player-info">
+                    <div class="song-title-wrapper">
+                        <h3 id="currentSongTitle">Tháng Năm Không Quên</h3>
+                    </div>
+                    <div class="player-controls">
+                        <i class="fas fa-step-backward" id="prevSongBtn"></i>
+                        <i class="fas fa-play" id="mainPlayBtn"></i>
+                        <i class="fas fa-step-forward" id="nextSongBtn"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="music-list-container">
+                <div class="music-option pulse-btn" data-src="style/sound/Tháng Năm Không Quên.mp3" data-img="style/sound/Anh (1).jpg">
+                    <img src="style/sound/Anh (1).jpg" alt="Tháng Năm Không Quên">
+                    <div class="music-info">
+                        <strong>Tháng Năm Không Quên</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Năm Tháng Trôi Qua.mp3" data-img="style/sound/Anh (2).jpg">
+                    <img src="style/sound/Anh (2).jpg" alt="Năm Tháng Trôi Qua">
+                    <div class="music-info">
+                        <strong>Năm Tháng Trôi Qua</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Nhớ Mãi Chuyến Đi Này.mp3" data-img="style/sound/Anh (3).jpg">
+                    <img src="style/sound/Anh (3).jpg" alt="Nhớ Mãi Chuyến Đi Này">
+                    <div class="music-info">
+                        <strong>Nhớ Mãi Chuyến Đi Này</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Không Yêu Cũng Chẳng Cô Đơn.mp3" data-img="style/sound/Anh (4).jpg">
+                    <img src="style/sound/Anh (4).jpg" alt="Không Yêu Cũng Chẳng Cô Đơn">
+                    <div class="music-info">
+                        <strong>Không Yêu Cũng Chẳng Cô Đơn</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Mùa Hè Của Peppa.mp3" data-img="style/sound/Anh (5).jpg">
+                    <img src="style/sound/Anh (5).jpg" alt="Mùa Hè Của Peppa">
+                    <div class="music-info">
+                        <strong>Mùa Hè Của Peppa</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Nơi Pháo Hoa Rực Rỡ.mp3" data-img="style/sound/Anh (6).jpg">
+                    <img src="style/sound/Anh (6).jpg" alt="Nơi Pháo Hoa Rực Rỡ">
+                    <div class="music-info">
+                        <strong>Nơi Pháo Hoa Rực Rỡ</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Lớp Chúng Minh - <i class="fas fa-heart"></i>Dr.Gifter</p>
+        </div>
+    </footer>
+
+    <script src="style/script.js"></script>
+</body>
+
+</html>
