@@ -827,30 +827,72 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+// PARALLAX TIMELINE 
   const timelineList = document.getElementById("timelineList");
   const loadMoreTimeline = document.getElementById("loadMoreTimeline");
+  const timelineBg = document.getElementById("timelineBg");
   let timelineData = [];
   let displayedTimelineCount = 0;
+
+  // Danh sách ảnh sẽ làm Background thay đổi tuần tự (Bạn có thể đổi số tùy ý)
+  const timelineBgs = [
+    "style/img/AnhTapThe/Anh (1).jpg",
+    "style/img/AnhTapThe/Anh (5).jpg",
+    "style/img/AnhTapThe/Anh (12).jpg",
+    "style/img/AnhTapThe/Anh (18).jpg",
+    "style/img/AnhTapThe/Anh (24).jpg"
+  ];
+
+  // Khởi tạo công cụ theo dõi (Observer) để biết khi nào người dùng cuộn tới Card nào
+  const timelineObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      // Khi 60% diện tích của Card Ký Ức lọt vào màn hình
+      if (entry.isIntersecting) {
+        // 1. Cho card hiện ra (Fade-in)
+        entry.target.classList.add("visible");
+        
+        // 2. Lấy link ảnh được gán lén vào card và thay đổi Background nền lớn
+        const bgUrl = entry.target.getAttribute("data-bg");
+        if (bgUrl && timelineBg) {
+            timelineBg.style.backgroundImage = `url('${bgUrl}')`;
+        }
+      }
+    });
+  }, { threshold: 0.6 });
 
   function renderTimelineChunk(count) {
     const nextItems = timelineData.slice(
       displayedTimelineCount,
-      displayedTimelineCount + count,
+      displayedTimelineCount + count
     );
+
     nextItems.forEach((itemData, index) => {
       const actualIndex = displayedTimelineCount + index;
       const item = document.createElement("div");
-      item.className = `timeline-item ${actualIndex % 2 === 0 ? "left" : "right"} animate-up`;
+      
+      // Chia trái/phải và gán link ảnh làm data ngầm định
+      item.className = `timeline-item ${actualIndex % 2 === 0 ? "left" : "right"}`;
+      const bgIndex = actualIndex % timelineBgs.length;
+      item.setAttribute("data-bg", timelineBgs[bgIndex]);
+
       item.innerHTML = `
-                <div class="timeline-dot"></div>
-                <div class="timeline-card">
-                    <span class="date">${itemData.date}</span>
-                    <h3>${itemData.title}</h3>
-                    <p>${itemData.desc}</p>
-                </div>
-            `;
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+              <span class="date">${itemData.date}</span>
+              <h3>${itemData.title}</h3>
+              <p>${itemData.desc}</p>
+          </div>
+      `;
       timelineList.appendChild(item);
+      
+      // Bắt đầu theo dõi Card này khi cuộn
+      timelineObserver.observe(item);
     });
+
+    // Cài đặt ảnh nền mặc định lúc mới tải trang
+    if (displayedTimelineCount === 0 && nextItems.length > 0) {
+        timelineBg.style.backgroundImage = `url('${timelineBgs[0]}')`;
+    }
 
     displayedTimelineCount += nextItems.length;
     if (displayedTimelineCount >= timelineData.length) {
@@ -859,20 +901,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (timelineList) {
+    // Tạo đường kẻ dọc chính giữa
+    const line = document.createElement("div");
+    line.className = "timeline-line";
+    timelineList.appendChild(line);
+
     fetch("style/timeline.txt")
       .then((res) => res.text())
       .then((data) => {
         const lines = data.trim().split("\n");
         timelineData = lines
           .map((line) => {
-            const parts = line.split("|").map((p) => p.trim());
+            // Loại bỏ nếu có và tách chuỗi
+            let cleanLine = line.replace(/\\s*/g, '').trim();
+            const parts = cleanLine.split("|").map((p) => p.trim());
             return parts.length >= 3
               ? { date: parts[0], title: parts[1], desc: parts[2] }
               : null;
           })
           .filter((i) => i);
 
-        renderTimelineChunk(4);
+        renderTimelineChunk(4); // Load 4 sự kiện đầu tiên
       })
       .catch((err) => console.error("Could not load timeline.txt", err));
 
