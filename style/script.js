@@ -835,13 +835,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let displayedTimelineCount = 0;
 
   // Danh sách ảnh sẽ làm Background thay đổi tuần tự (Bạn có thể đổi số tùy ý)
-  const timelineBgs = [
-    "style/img/AnhTapThe/Anh (1).jpg",
-    "style/img/AnhTapThe/Anh (5).jpg",
-    "style/img/AnhTapThe/Anh (12).jpg",
-    "style/img/AnhTapThe/Anh (18).jpg",
-    "style/img/AnhTapThe/Anh (24).jpg"
-  ];
+  // Tự động nạp toàn bộ 54 ảnh nền để thay đổi tuần tự
+  const timelineBgs = [];
+  for (let i = 1; i <= 54; i++) {
+      timelineBgs.push(`style/img/AnhTapThe/Anh (${i}).jpg`);
+  }
 
   // Khởi tạo công cụ theo dõi (Observer) để biết khi nào người dùng cuộn tới Card nào
   const timelineObserver = new IntersectionObserver((entries) => {
