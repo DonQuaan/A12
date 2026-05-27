@@ -2168,3 +2168,43 @@ body {
 .timeline-parallax .section-title::after {
     background: linear-gradient(90deg, #ffffff, var(--secondary-color)) !important;
 }
+
+/* ==================== VÁ LỖI CỔNG BẢO VỆ (GATEKEEPER) SÁNG/TỐI ==================== */
+/* 1. Đổi màu nền của hộp câu hỏi theo giao diện */
+.gate-card {
+    background: var(--card-bg) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(116, 139, 167, 0.2) !important;
+}
+
+/* 2. Đổi màu chữ của câu hỏi */
+.gate-question {
+    color: var(--text-color) !important;
+}
+
+/* 3. Đổi màu các nút đáp án A, B, C, D */
+.gate-btn {
+    background: transparent !important;
+    color: var(--text-color) !important;
+    border: 2px solid rgba(116, 139, 167, 0.3) !important;
+}
+
+/* Khi di chuột vào nút đáp án */
+.gate-btn:hover {
+    background: var(--primary-color) !important;
+    color: #ffffff !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* 4. Đổi màu bảng Thông báo (Alert) Trả lời Đúng/Sai */
+.gate-alert {
+    background: var(--card-bg) !important;
+    border: 1px solid rgba(116, 139, 167, 0.2) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.alert-content p {
+    color: var(--text-color) !important;
+}
