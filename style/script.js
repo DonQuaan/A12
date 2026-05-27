@@ -375,21 +375,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function program(delay = 200) {
-    (function () {
-      const _b = (s) => decodeURIComponent(escape(atob(s)));
-      const _d = [
-        "QuG6o24gcXV54buBbiB0aHXhu5ljIHbhu4IgRHIuR2lmdGVy",
-        "VGlrdG9rOiBodHRwczovL3d3dy50aWt0b2suY29tL0Bkci5naWZ0ZXIzMDY=",
-        "R2l0aHViOiBodHRwczovL2dpdGh1Yi5jb20vRHJHaWZ0ZXI=",
-      ];
-
-      setTimeout(() => {
-        _d.forEach((x) => console.log(_b(x)));
-      }, delay);
-    })();
-  }
-
   const profileModal = document.getElementById("profileModal");
   const closeProfile = document.querySelector(".close-profile");
   const modalCard = profileModal.querySelector(".modal-card");
