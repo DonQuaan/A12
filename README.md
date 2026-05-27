@@ -67,5 +67,16 @@ Cảm ơn vì đã bao dung, đã gắn bó và đã là thanh xuân tuyệt đ�
 **Tạm biệt nhé, nhưng không phải là chia xa, mà là để hẹn ngày tương phùng rực rỡ nhất ở những đỉnh cao mới!** 🌻
 
 ---
+
+## 📬 Liên hệ
+
+- **Email:** donquaan.x@gmail.com ● abcxyzdonq@gmail.com  
+- **Điện thoại:** +84 0931902475 
+- **GitHub:** [github.com/DonQuaan](https://github.com/DonQuaan)
+- **Discord:** [yangdawn](https://discord.com/users/1106820756526080020)  
+- **Facebook:** [fb.com/donquaan](https://www.facebook.com/NguyenDonQuaan/)
+
+> *Mọi thắc mắc, góp ý hoặc yêu cầu hợp tác liên quan đến Dự án xin vui lòng gửi về các kênh trên. Chúng tôi sẽ phản hồi trong thời gian sớm nhất.*
+---
 *lưu trữ và bảo tồn vô thời hạn bởi DonQuaan.*  
 *Dành trọn vẹn tình yêu và thanh xuân cho Tập thể A12.*
