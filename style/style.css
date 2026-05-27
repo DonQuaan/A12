@@ -1651,7 +1651,7 @@ h1, h2, h3, .handwritten {
 
 /* ================= TIME CAPSULE STYLE ================= */
 .time-capsule-section {
-    background: linear-gradient(135deg, #1e272e, #0f141c);
+    background-color: var(--card-bg);
     padding: 100px 0;
     position: relative;
 }
@@ -1810,7 +1810,7 @@ h1, h2, h3, .handwritten {
 .quiz-parallax {
     position: relative;
     padding: 80px 0;
-    background: linear-gradient(135deg, #2d3436, #1e272e);
+    background-color: var(--card-bg);
     text-align: center;
 }
 
