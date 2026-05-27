@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const galleryImages = [];
   const layoutClasses = ["", "wide", "tall", ""];
 
-  for (let i = 1; i <= 27; i++) {
+  for (let i = 1; i <= 54; i++) {
     const randomClass =
       layoutClasses[Math.floor(Math.random() * layoutClasses.length)];
     galleryImages.push({
