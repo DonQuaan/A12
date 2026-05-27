@@ -966,4 +966,42 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   setInterval(createParticle, 300);
+  
+  // Đặt mốc thời gian đích xác 5 năm sau tính từ 31/05/2026 -> Ngày 31 tháng 5 năm 2031
+  const targetUnlockTime = new Date("May 31, 2031 00:00:00").getTime();
+
+  const timeCapsuleTimer = setInterval(() => {
+    const currentTime = new Date().getTime();
+    const timeRemaining = targetUnlockTime - currentTime;
+
+    // Xử lý toán học bóc tách Ngày, Giờ, Phút, Giây chuẩn xác
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    // Tìm các thẻ ID hiển thị ngoài màn hình
+    const daysElement = document.getElementById("cd-days");
+    const hoursElement = document.getElementById("cd-hours");
+    const minutesElement = document.getElementById("cd-minutes");
+    const secondsElement = document.getElementById("cd-seconds");
+
+    // Nếu tìm thấy thẻ, đổ số vào và tự thêm số "0" phía trước nếu số chỉ có 1 chữ số
+    if (daysElement) daysElement.innerText = days < 10 ? "0" + days : days;
+    if (hoursElement) hoursElement.innerText = hours < 10 ? "0" + hours : hours;
+    if (minutesElement) minutesElement.innerText = minutes < 10 ? "0" + minutes : minutes;
+    if (secondsElement) secondsElement.innerText = seconds < 10 ? "0" + seconds : seconds;
+
+    // KỊCH BẢN KHI ĐỦ 5 NĂM (Thời gian còn lại bé hơn hoặc bằng 0)
+    if (timeRemaining <= 0) {
+      clearInterval(timeCapsuleTimer); // Dừng bộ đếm ngược chạy ngầm để tiết kiệm RAM
+
+      const lockedBox = document.getElementById("capsuleLocked");
+      const unlockedBox = document.getElementById("capsuleUnlocked");
+
+      // Giấu hộp khóa đếm ngược đi và kích hoạt hiển thị video bí mật
+      if (lockedBox) lockedBox.style.display = "none";
+      if (unlockedBox) unlockedBox.style.display = "block";
+    }
+  }, 1000); // Lặp lại kiểm tra liên tục sau mỗi 1000 mili-giây (1 giây)
 });
