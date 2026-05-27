@@ -1,18 +1,39 @@
 /* Design System & Variables */
+/* 1. CHẾ ĐỘ SÁNG (Màu giấy mộc, êm dịu, tôn ảnh) */
 :root {
-    --primary-color: #748BA7; /* Muted Blue */
-    --secondary-color: #F7E7CE; /* Champagne */
-    --accent-color: #E6AACE; /* Dusty Rose */
-    --text-color: #2D3436;
-    --bg-light: #F8F9FA;
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --glass-bg: rgba(255, 255, 255, 0.7);
+    --primary-color: #6a829e;      /* Xanh Blue trầm - Thanh lịch */
+    --secondary-color: #dcb38a;    /* Vàng Champagne nhẹ - Hoài niệm */
+    --accent-color: #d49a89;       /* Hồng đất - Vintage, ấm áp */
+    --text-color: #2c3e50;         /* Xanh Navy rất đậm - Không dùng màu đen chói mắt */
+    --bg-light: #f7f5f0;           /* Màu giấy hơi kem - Bảo vệ mắt */
+    --card-bg: rgba(255, 255, 255, 0.85); /* Kính mờ sáng */
+    --glass-bg: rgba(247, 245, 240, 0.85); 
     --transition-slow: 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-fast: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
-    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.08);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+/* 2. CHẾ ĐỘ TỐI (Quyền lực, sâu thẳm, nổi bật ảnh rực rỡ) */
+[data-theme="dark"] {
+    --primary-color: #8fa6c2;      /* Xanh Blue sáng hơn để nổi trên nền tối */
+    --secondary-color: #e3c19d;    /* Vàng Champagne sáng hơn */
+    --accent-color: #dfa999;       /* Hồng đất sáng hơn */
+    --text-color: #e2e8f0;         /* Xám trắng êm dịu - Không dùng trắng tinh */
+    --bg-light: #181c20;           /* Đen Slate (hơi ám xanh) - Rất điện ảnh và sang trọng */
+    --card-bg: rgba(30, 35, 42, 0.85); /* Kính mờ tối */
+    --glass-bg: rgba(24, 28, 32, 0.85);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
+    --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Hiệu ứng chuyển đổi màu sắc mượt mà toàn trang */
+body {
+    transition: background-color 0.6s ease, color 0.6s ease;
+}
+.member-card, .glass-card, .time-block, .quiz-intro-box, .quiz-container, .result-container {
+    transition: background-color 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease, transform 0.4s ease;
+}
 
 * {
     margin: 0;
