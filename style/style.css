@@ -2144,3 +2144,17 @@ body {
 .quiz-header {
     color: var(--primary-color) !important;
 }
+
+/* ==================== BẢN VÁ LỖI HIỂN THỊ TIÊU ĐỀ SÁNG/TỐI ==================== */
+/* Ép buộc mọi tiêu đề lớn phải dùng biến màu của hệ thống, vô hiệu hóa mọi màu trắng/đen bị gán nhầm */
+.section-title, 
+.section-title.text-white {
+    color: var(--text-color) !important;
+}
+
+/* Đảm bảo chữ nội dung của Hòm thư thời gian (nếu có) cũng được lật màu */
+.time-capsule-letter p, 
+.unlocked-subtitle,
+.quiz-desc {
+    color: var(--text-color) !important;
+}
