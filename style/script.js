@@ -1004,4 +1004,150 @@ document.addEventListener("DOMContentLoaded", () => {
       if (unlockedBox) unlockedBox.style.display = "block";
     }
   }, 1000); // Lặp lại kiểm tra liên tục sau mỗi 1000 mili-giây (1 giây)
+  // ================= QUIZ MINI GAME LOGIC =================
+  const quizData = [
+    { q: 'Ai là GVCN năm lớp 8 của A12 với biệt danh vô cùng "đồ sộ" và đáng yêu là "Thầy Voi"?', options: ['Thầy Quang Thạch', 'Cô Mỹ Dung', 'Cô Thu Thủy', 'Có thầy này nữa hả ta? Cứu tui với!'], ans: 0 },
+    { q: 'Đâu là cô giáo chủ nhiệm đầu tiên đặt nền móng và dìu dắt A12 vào năm học lớp 7 đầy bỡ ngỡ?', options: ['Cô Mỹ Dung', 'Cô Thu Thủy', '[Điền tên một học sinh để lừa]', 'Ủa lớp 7 có đi học hả? Sao tui không nhớ gì!'], ans: 1 },
+    { q: 'Người đã đồng hành cùng A12 vượt qua năm học cuối cấp lớp 9 đầy giông bão, thi cử áp lực là ai?', options: ['Cô Mỹ Dung', 'Cô Thu Thủy', 'Thầy Quang Thạch', 'Giờ hỏi tên GVCN lớp 9 là một hệ tâm linh rồi...'], ans: 0 },
+    { q: 'Ai là "chiến thần ngủ gật", coi bàn học giờ Toán như chiếc giường King-size êm ái nhất quả đất?', options: ['Đông Quân', 'Bảo Nam', 'Hoàng Anh', 'Đứa nào cũng ngủ gật như nhau, hỏi câu này trầm cảm quá!'], ans: 3 },
+    { q: 'Thành viên nào trong lớp có cái tên mang ý nghĩa là "khởi đầu của ánh sáng mặt trời và những điều tốt đẹp nhất"?', options: ['Nhật Quang', 'Bình Minh', 'Đông Quân', 'Nghe tên thấy thơ mộng quá mà đầu tui thì trống rỗng'], ans: 1 },
+    { q: 'Bạn học nào sinh ra đã mang định mệnh của sự chiến thắng, với cái tên là "khúc ca khải hoàn"?', options: ['Hoàng Cung', 'Khải Hoàn', 'Quang Chánh', 'Tên gì nghe sang dữ thần, nhưng tui không biết ai đâu á.'], ans: 1 },
+    { q: '"Đóa hoa Quỳnh chỉ nở rộ vào ban đêm, tỏa hương tĩnh lặng mà nồng nàn" là câu lưu bút miêu tả về ai?', options: ['Huỳnh Quỳnh', 'Cát Hồng', 'Thảo Nguyên', 'Ủa hoa quỳnh là hoa gì dợ? Tui chỉ biết hoa "ăn học" thôi.'], ans: 0 },
+    { q: 'Đâu là cặp đôi "kề vai áp cánh" gây nhiều nghi án tình cảm hoặc "thuyền" được chèo nhiệt tình nhất A12?', options: ['Cát Hồng & Gia Huy', 'Bảo Ngân & Hoàng Cung', 'Chánh & Minh Anh', 'OTP này tui không dám chèo, sợ lật thuyền bay màu lắm.'], ans: 2 },
+    { q: '"Chúa tể ăn vụng" bất chấp giờ ra chơi hay giờ học, tốc độ nhai và tẩu tán tang vật nhanh hơn tốc độ ánh sáng?', options: ['Chí Thành', 'Đông Quân', 'Chánh', 'Nhìn quanh ai cái mỏ cũng nhai nhồm nhoàm, chịu chết!'], ans: 0 },
+    { q: 'Ai là "mỏ neo nhạy cảm", người dễ rơi nước mắt nhất mỗi khi lớp có sự kiện cảm động, xem clip kỷ niệm hoặc chia tay?', options: ['Minh Anh', 'Cát Hồng', 'Hoàng Cung', 'Tâm hồn sỏi đá như tui làm sao cảm nhận được giọt nước mắt rơi.'], ans: 1 },
+    { q: 'Người nắm giữ kỷ lục "vua đi trễ", luôn xuất hiện đúng lúc tiếng trống trường vừa dứt?', options: ['Song Thư', 'Tường An', 'Đông Quân', 'Tui lo chạy muốn chết có rảnh đâu mà canh đứa nào trễ nhất!'], ans: 0 },
+    { q: '"Phao cứu sinh quốc dân" của lớp mỗi sáng sớm trước giờ truy bài là ai? (Người mà cả lớp xếp hàng mượn vở)', options: ['Bảo Ngân', 'Bình Minh', 'Minh Anh', 'Sáng nào tui cũng lo mượn chứ có kịp nhìn xem nguồn gốc từ đâu ra đâu.'], ans: 1 },
+    { q: '"Cái loa phát thanh" của A12, chỉ cần bạn ấy cất tiếng là cả dãy hành lang đều phải ngoảnh lại nhìn?', options: ['Chánh', 'Song Thư', 'Huy Quỳnh', 'Tai tui điếc luôn rồi, không nghe không thấy không biết nha!'], ans: 2 },
+    { q: '"Nghệ sĩ hài nhân dân" chuyên phát ngôn ra những câu vô tri hoặc làm trò hề xả stress cực mạnh?', options: ['Nhật Quang', 'Minh Khôi', 'Minh Anh', 'Câu này hề quá, tế nhị quá tui xin đầu hàng!'], ans: 0 },
+    { q: 'Ai là "ông hoàng visual/bà chúa điệu đà" luôn chăm chút cho đầu tóc, quần áo chuẩn chỉnh chỉnh chu nhất lớp?', options: ['Đông Quân', 'Huy Quỳnh', 'Chí Thành', 'Ai cũng lộng lẫy kiêu sa trừ tui ra, chịu nha!'], ans: 1 },
+    { q: 'Kẻ chuyên đi mượn bút, mượn thước, máy tính rồi "bốc hơi" luôn không thấy ngày trả lại là ai?', options: ['Nhật Quang', 'Chánh', 'Hoàng Anh', 'Hỏi vậy rồi sao đứa lấy dám trả, tui chọn im lặng là vàng!'], ans: 3 },
+    { q: '"Chiến thần trực nhật" có tâm nhất hệ mặt trời, lau bảng sạch bóng không tì vết?', options: ['Bình Minh', 'Gia Huy', 'Minh Anh', 'Tui toàn trốn trực nhật nên tui không biết ai chăm đâu!'], ans: 2 },
+    { q: 'Bạn thuộc hệ "hướng nội full-time", không nói câu nào nhưng cứ thi là điểm cao ngất ngưởng làm ai cũng sốc?', options: ['Khánh Châu', 'Cát Hồng', 'Minh Anh', 'Đã bảo hướng nội rồi sao tui biết được mà trả lời!'], ans: 0 },
+    { q: '"Hãy sống như đóa hướng dương, luôn hướng về phía mặt trời..." là lời chúc dành cho bạn nào?', options: ['Nhật Quang', 'Đông Quân', 'Gia Huy', 'Thôi xin đầu hàng, học văn dốt lắm nghe thơ xong muốn xỉu ngang.'], ans: 0 },
+    { q: '"KOL ngầm" của lớp, sở hữu MXH nhiều follow nhất hoặc suốt ngày rủ cả lớp quay TikTok?', options: ['Nhật Hoàng', 'Huy Quỳnh', 'Chí Thành', 'Tui tối cổ lắm, không theo kịp trào lưu đâu cứu tui.'], ans: 1 },
+    { q: 'Tại sao Thầy Quang Thạch (lớp 8) lại có biệt danh vô cùng đáng yêu là "Thầy Voi"?', options: ['Vì thầy có vóc dáng cao lớn và uy nghiêm', 'Vì thầy có thân hình mập mạp dễ thương', 'Vì thầy hay ăn nhiều đồ ăn và thích du lịch', 'Câu này chỉ có thầy biết chứ học trò tụi em chịu cứng!'], ans: 1 },
+    { q: 'Hình phạt "đặc sản" hoặc câu nói cửa miệng huyền thoại của cô Mỹ Dung mỗi khi lớp A12 ồn ào là gì?', options: ['“Ra đây cô nói chuyện…”', 'Cô chưa bao giờ phạt tôi kkkk', 'Một câu trích dẫn văn học nào đó', 'Nhắc tới là rén ngang, thôi chọn phương án này cho an toàn.'], ans: 0 },
+    { q: 'Nếu tính cả 26 học sinh và 3 thầy cô giáo chủ nhiệm qua các năm, tổng số thành viên của gia đình A12 là?', options: ['28 thành viên', '29 thành viên', '31 thành viên', '33 thành viên'], ans: 3 },
+    { q: 'Câu lưu bút: “Mong bạn sau này chẳng cần ai định nghĩa mới biết mình là ai...” là của bạn nào?', options: ['Bảo Nhân', 'Đông Quân', 'Tường An', 'Lưu bút của ai nấy giữ, tui hổng biết đâu nha!'], ans: 1 },
+    { q: 'Lời chúc mở đầu đầy hoài niệm: "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn..." là của ai?', options: ['Chí Thành', 'Hoàng Anh', 'Bảo Nam', 'Cứu tui, trí nhớ 3 giây không nhớ nổi ai viết hết trơn!'], ans: 0 }
+  ];
+
+  let currentQIndex = 0;
+  let score = 0;
+  let wrongList = [];
+  let isAnswering = false; // Chống click đúp
+
+  const quizIntro = document.getElementById("quizIntro");
+  const quizContainer = document.getElementById("quizContainer");
+  const resultContainer = document.getElementById("resultContainer");
+  const questionText = document.getElementById("questionText");
+  const optionsContainer = document.getElementById("optionsContainer");
+  const questionCounter = document.getElementById("questionCounter");
+  const scoreTracker = document.getElementById("scoreTracker");
+
+  // Âm thanh Game (Sử dụng 2 file audio đã có sẵn)
+  const soundCorrect = new Audio("style/question/correct.mp3");
+  const soundWrong = new Audio("style/question/wrong.mp3");
+
+  document.getElementById("startQuizBtn")?.addEventListener("click", () => {
+      quizIntro.style.display = "none";
+      quizContainer.style.display = "block";
+      loadQuestion();
+  });
+
+  function loadQuestion() {
+      isAnswering = false;
+      const qData = quizData[currentQIndex];
+      questionCounter.innerText = `Câu ${currentQIndex + 1}/25`;
+      scoreTracker.innerText = `Điểm: ${score}`;
+      questionText.innerText = qData.q;
+      optionsContainer.innerHTML = '';
+
+      qData.options.forEach((opt, index) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          // Render theo format A. B. C. D.
+          const labels = ['A', 'B', 'C', 'D'];
+          btn.innerText = `${labels[index]}. ${opt}`;
+          btn.onclick = () => handleAnswer(index, btn);
+          optionsContainer.appendChild(btn);
+      });
+  }
+
+  function handleAnswer(selectedIndex, btnElement) {
+      if (isAnswering) return;
+      isAnswering = true;
+      const qData = quizData[currentQIndex];
+      
+      const allBtns = optionsContainer.querySelectorAll(".option-btn");
+      const correctBtn = allBtns[qData.ans];
+
+      if (selectedIndex === qData.ans) {
+          // Đúng
+          score++;
+          btnElement.classList.add("correct-ans");
+          soundCorrect.currentTime = 0;
+          soundCorrect.play();
+      } else {
+          // Sai
+          btnElement.classList.add("wrong-ans");
+          correctBtn.classList.add("correct-ans"); // Nhá đèn xanh cho đáp án đúng
+          wrongList.push({ q: qData.q, correctOpt: qData.options[qData.ans] });
+          soundWrong.currentTime = 0;
+          soundWrong.play();
+      }
+      
+      scoreTracker.innerText = `Điểm: ${score}`;
+
+      // Đợi 1.5 giây để nhìn kết quả rồi nhảy câu tiếp
+      setTimeout(() => {
+          currentQIndex++;
+          if (currentQIndex < quizData.length) {
+              loadQuestion();
+          } else {
+              showResults();
+          }
+      }, 1500);
+  }
+
+  function showResults() {
+      quizContainer.style.display = "none";
+      resultContainer.style.display = "block";
+      document.getElementById("finalScoreText").innerText = `${score}/25`;
+      
+      // Xếp hạng Thần Thánh
+      const rankEl = document.getElementById("rankTitle");
+      if (score === 25) rankEl.innerText = "🏆 Gia Phả Sống Hệ VIP PRO của A12";
+      else if (score >= 20) rankEl.innerText = "⚡ Chiến Thần TVA: Kẻ Nắm Giữ Dòng Thời Gian A12";
+      else if (score >= 15) rankEl.innerText = "🎥 Camera Chạy Bằng Cơm Cấp Vũ Trụ";
+      else if (score >= 10) rankEl.innerText = "😎 PHONG CÁCH PHONG CÁCH";
+      else if (score >= 5) rankEl.innerText = "👌 Pha xử lý này CƠ BẢN";
+      else rankEl.innerText = "🐔 non";
+
+      // Hiển thị danh sách câu sai
+      const wrongBlock = document.getElementById("wrongAnswersBlock");
+      const wrongUl = document.getElementById("wrongAnswersList");
+      wrongUl.innerHTML = '';
+      
+      if (wrongList.length === 0) {
+          wrongBlock.style.display = "none";
+      } else {
+          wrongBlock.style.display = "block";
+          wrongList.forEach(item => {
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>Câu hỏi:</strong> ${item.q}<br><span style="color:#2ecc71;">=> Đáp án đúng: ${item.correctOpt}</span>`;
+              wrongUl.appendChild(li);
+          });
+      }
+  }
+
+  document.getElementById("retryQuizBtn")?.addEventListener("click", () => {
+      currentQIndex = 0;
+      score = 0;
+      wrongList = [];
+      resultContainer.style.display = "none";
+      quizContainer.style.display = "block";
+      loadQuestion();
+  });
 });
