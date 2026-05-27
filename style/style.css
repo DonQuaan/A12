@@ -1982,3 +1982,165 @@ h1, h2, h3, .handwritten {
         font-size: 1.2rem;
     }
 }
+
+/* ==================== BẢN VÁ LỖI TOÀN DIỆN TỪ CHUYÊN GIA ==================== */
+
+/* 1. FIX LỖI THẺ THÀNH VIÊN Ở CHẾ ĐỘ TỐI BỊ CHỮ ĐEN NỀN ĐEN */
+.modal-card {
+    background: var(--bg-light) !important; /* Tự lật màu trắng/đen theo theme */
+    box-shadow: var(--shadow-premium) !important;
+    border: 1px solid rgba(116, 139, 167, 0.2);
+}
+
+.modal-card h3, .modal-card .profile-field span {
+    color: var(--text-color) !important; /* Ép chữ theo chuẩn theme */
+}
+
+.profile-field strong {
+    color: var(--primary-color) !important; /* Điểm nhấn nổi bật hơn thay vì xám mờ */
+}
+
+/* 2. FIX LỖI BÀI TEST QUIZ Ở CHẾ ĐỘ SÁNG BỊ LỖI CHỮ */
+.option-btn {
+    color: var(--text-color) !important; /* Ép chữ đen ở sáng, trắng ở tối */
+    background: transparent !important;
+}
+.option-btn:hover {
+    color: #fff !important; /* Khi hover lên nền xanh thì chữ phải trắng */
+}
+
+/* 3. FIX LỖI ĐỒNG HỒ ĐẾM NGƯỢC (TIME CAPSULE) ĐỂ SÁNG/TỐI ĐỀU ĐẸP & CHUYÊN NGHIỆP */
+.time-capsule-section {
+    background-color: var(--bg-light) !important; 
+}
+
+.capsule-locked-block, .capsule-unlocked-block {
+    background: var(--card-bg) !important; /* Kính mờ Sáng/Tối */
+    border: 1px solid rgba(116, 139, 167, 0.2) !important;
+    color: var(--text-color) !important;
+}
+
+.time-block {
+    background: var(--bg-light) !important; /* Lấy màu nền của body làm nền khối để nổi khối */
+    border: 1px solid rgba(116, 139, 167, 0.2) !important;
+    box-shadow: var(--shadow-soft) !important;
+}
+
+.time-block span {
+    color: var(--text-color) !important; /* Đen ở theme sáng, Trắng ở theme tối */
+}
+
+.time-divider {
+    color: var(--primary-color) !important; /* Dấu hai chấm chớp nháy màu xanh sang trọng */
+}
+
+.capsule-warning-text, .unlock-target-date {
+    color: var(--text-color) !important;
+    opacity: 0.8;
+}
+
+/* 4. FIX LỖI MÀU CHÂN TRANG (FOOTER) CHUẨN XÁC THEO THEME */
+.main-footer {
+    background-color: var(--bg-light) !important; /* Đổi màu nền về chuẩn theme chứ không fix cứng màu text */
+    color: var(--text-color) !important;
+    border-top: 1px solid rgba(116, 139, 167, 0.1);
+}
+
+.contact-info p, .contact-info strong {
+    color: var(--text-color) !important;
+}
+
+.social-links ul li a {
+    color: var(--text-color) !important;
+    opacity: 0.8;
+}
+
+.social-links ul li a:hover {
+    color: var(--primary-color) !important;
+    opacity: 1;
+}
+
+/* Các Icon Mạng Xã Hội ở chân trang */
+.social-links ul li a i, .contact-info p i {
+    color: var(--primary-color) !important;
+}
+
+.footer-bottom p {
+    color: var(--text-color) !important;
+    opacity: 0.6;
+}
+
+/* 5. FIX LỖI MOBILE BỊ LỆCH MÀN HÌNH VÀ TRÀN LỀ (QUAN TRỌNG NHẤT) */
+/* Nguyên nhân: Đồng hồ đếm ngược và Quiz bị tràn kích thước gây vỡ layout (X Scrollbar) */
+body {
+    overflow-x: hidden; /* Ép buộc cắt bỏ mọi thứ tràn ra chiều ngang */
+    width: 100%;
+}
+
+.container {
+    overflow: hidden; /* Giữ layout nội bộ gọn gàng */
+}
+
+/* Ẩn Logo Mobile trên Desktop */
+.mobile-logo-item {
+    display: none;
+}
+
+/* 6. RESPONSIVE HOÀN HẢO CHO MOBILE */
+@media screen and (max-width: 768px) {
+    /* Hiển thị Logo khi mở menu burger trên điện thoại */
+    .mobile-logo-item {
+        display: block;
+    }
+    
+    /* Canh chỉnh lại khoảng cách trên điện thoại để không cấn mép */
+    .section {
+        padding: 60px 15px; 
+    }
+    
+    .section-title {
+        font-size: 2rem;
+        margin-bottom: 40px;
+    }
+
+    /* Thu nhỏ hộp Time Capsule để vừa màn hình */
+    .capsule-locked-block, .capsule-unlocked-block {
+        padding: 30px 15px !important;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Thu nhỏ Đồng hồ Đếm ngược để chống vỡ màn hình ngang */
+    .digital-countdown {
+        gap: 5px !important;
+    }
+
+    .time-block {
+        min-width: 60px !important;
+        padding: 10px 5px !important;
+        border-radius: 12px !important;
+    }
+
+    .time-block span {
+        font-size: 1.5rem !important;
+    }
+
+    .time-divider {
+        font-size: 1.5rem !important;
+        padding-bottom: 15px !important;
+    }
+
+    /* Bẻ gãy các icon mạng xã hội nằm gọn trên đt */
+    .social-links ul li a {
+        justify-content: center;
+    }
+}
+
+/* Sửa lỗi mờ khung chữ (từ ảnh của bạn) */
+.quiz-desc, .question-text {
+    color: var(--text-color) !important;
+}
+
+.quiz-header {
+    color: var(--primary-color) !important;
+}
