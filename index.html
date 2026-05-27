@@ -226,6 +226,7 @@
             <p>&copy; 2026 Lớp Chúng Minh - <i class="fas fa-heart"></i>9A12</p>
         </div>
     </footer>
+
     <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         var ytPlayer;
@@ -233,15 +234,26 @@
             ytPlayer = new YT.Player('yt-video', {
                 events: {
                     'onStateChange': function(event) {
+                        var bgMusic = document.getElementById('bg-music');
+                        var playBtn = document.getElementById('mainPlayBtn');
+                        var musicModal = document.getElementById('musicModal');
+
+                        // Trạng thái số 1: Video ĐANG PHÁT -> Tắt nhạc nền đi
                         if (event.data === 1) {
-                            var bgMusic = document.getElementById('bg-music');
-                            var playBtn = document.getElementById('mainPlayBtn');
-                            var musicModal = document.getElementById('musicModal');
-                            
                             if (bgMusic && !bgMusic.paused) {
                                 bgMusic.pause();
                                 if (playBtn) playBtn.className = 'fas fa-play';
                                 if (musicModal) musicModal.classList.remove('playing');
+                            }
+                        }
+                        // Trạng thái số 2 (Tạm dừng) hoặc số 0 (Xem xong phim) -> Bật lại nhạc nền
+                        else if (event.data === 2 || event.data === 0) {
+                            if (bgMusic && bgMusic.src && bgMusic.src !== '' && !bgMusic.src.endsWith('index.html')) {
+                                bgMusic.play().then(() => {
+                                    // Đổi lại giao diện trình phát nhạc sang trạng thái đang chạy mượt mà
+                                    if (playBtn) playBtn.className = 'fas fa-pause';
+                                    if (musicModal) musicModal.classList.add('playing');
+                                }).catch((e) => console.log("Không thể tự động bật nhạc:", e));
                             }
                         }
                     }
@@ -252,6 +264,4 @@
     
     <script src="style/script.js"></script>
 </body>
-</html>
-
 </html>
