@@ -1150,4 +1150,42 @@ document.addEventListener("DOMContentLoaded", () => {
       quizContainer.style.display = "block";
       loadQuestion();
   });
+  // LOGIC CHUYỂN ĐỔI SÁNG/TỐI
+  const themeToggleBtn = document.getElementById("themeToggleBtn");
+  const themeIcon = themeToggleBtn.querySelector("i");
+  
+  // Kiểm tra xem trước đó người dùng đã chọn chế độ nào chưa (Lưu trong LocalStorage)
+  const currentSavedTheme = localStorage.getItem("a12-theme");
+
+  // Nếu trước đó họ chọn Dark, thì kích hoạt ngay lập tức khi vào web
+  if (currentSavedTheme === "dark") {
+      document.body.setAttribute("data-theme", "dark");
+      themeIcon.classList.replace("fa-moon", "fa-sun"); // Đổi icon thành Mặt trời
+  }
+
+  // Lắng nghe sự kiện click vào nút
+  themeToggleBtn.addEventListener("click", () => {
+      // Kiểm tra xem body đang có data-theme="dark" hay không
+      const isDarkMode = document.body.getAttribute("data-theme") === "dark";
+
+      if (isDarkMode) {
+          // Đang là Tối -> Chuyển sang Sáng
+          document.body.removeAttribute("data-theme");
+          localStorage.setItem("a12-theme", "light"); // Lưu lại vào não trình duyệt
+          themeIcon.style.transform = "rotate(-360deg)"; // Hiệu ứng xoay mượt
+          setTimeout(() => {
+              themeIcon.classList.replace("fa-sun", "fa-moon");
+              themeIcon.style.transform = "rotate(0deg)";
+          }, 150);
+      } else {
+          // Đang là Sáng -> Chuyển sang Tối
+          document.body.setAttribute("data-theme", "dark");
+          localStorage.setItem("a12-theme", "dark");
+          themeIcon.style.transform = "rotate(360deg)";
+          setTimeout(() => {
+              themeIcon.classList.replace("fa-moon", "fa-sun");
+              themeIcon.style.transform = "rotate(0deg)";
+          }, 150);
+      }
+  });
 });
