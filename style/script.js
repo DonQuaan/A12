@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "Cô Thu Thủy - GVCN K7",
       nickname: "Dòng Sông Tình Yêu",
       quote: "Đời người như một bài toán, Cô tin chúng em tự tin tìm ra đáp án của riêng mình. Chúc các em mãi là hằng số của sự bình yên và vui vẻ!",
-      img: "style/img/ThanhVien/Trịnh Quang Thạch.jpg",
+      img: "style/img/ThanhVien/Nguyễn Thị Thu Thuỷ.jpg",
       hobbies: "Dạy học, Toán Học",
       message: "Toán học dạy chúng ta tìm nghiệm cho những phương trình có sẵn, nhưng cuộc đời thực lại là một chuỗi những phương trình vô số ẩn, nơi các em phải tự định nghĩa các giá trị cho riêng mình. Có những giai đoạn các em sẽ thấy cuộc sống biến thiên liên tục, áp lực đè nặng tưởng chừng như tiệm cận đến vô cực, và những phép thử chỉ mang lại sai số đau lòng. Nhưng đừng quên rằng, một đường cong dù có phức tạp đến đâu cũng được kiến tạo từ vô số những điểm chấm nhỏ li ti đứng cạnh nhau một cách kiên nhẫn. Sự trưởng thành chính là tích phân của những nỗ lực thầm lặng tích lũy qua mỗi ngày. Khi bước vào thế giới của những người trưởng thành đầy rẫy biến số, cô mong các em luôn giữ cho mình một 'hằng số' bất biến: đó là sự lương thiện và lòng tự trọng. Đáp án cuối cùng của bài toán cuộc đời không nằm ở con số x bằng bao nhiêu, mà nằm ở việc các em đã giải nó bằng tất cả sự kiên nhẫn và thanh danh của chính mình.",
     },
