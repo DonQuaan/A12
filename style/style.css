@@ -1627,3 +1627,160 @@ h1, h2, h3, .handwritten {
 .profile-modal .profile-body::-webkit-scrollbar-thumb:hover {
     background: var(--accent-color);
 }
+
+/* ================= TIME CAPSULE STYLE ================= */
+.time-capsule-section {
+    background: linear-gradient(135deg, #1e272e, #0f141c);
+    padding: 100px 0;
+    position: relative;
+}
+
+.capsule-locked-block, .capsule-unlocked-block {
+    max-width: 800px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 60px 40px;
+    border-radius: 30px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+/* Hiệu ứng xích sắt và ổ khóa vàng */
+.iron-chains-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.master-lock {
+    font-size: 4rem;
+    color: var(--secondary-color); /* Màu Champagne sáng loáng */
+    animation: lockPulseAnimation 2.5s infinite alternate ease-in-out;
+}
+
+.chain-iron {
+    font-size: 2.8rem;
+    color: #718093; /* Màu xám sắt thép */
+    opacity: 0.6;
+}
+
+.left-link { transform: rotate(-25deg); }
+.right-link { transform: rotate(25deg); }
+
+@keyframes lockPulseAnimation {
+    0% { transform: scale(1); filter: drop-shadow(0 0 5px rgba(247, 231, 206, 0.4)); }
+    100% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(247, 231, 206, 0.8)); }
+}
+
+.capsule-warning-text {
+    font-size: 1.15rem;
+    color: #dcdde1;
+    font-style: italic;
+    margin-bottom: 45px;
+    line-height: 1.6;
+}
+
+/* Thiết kế đồng hồ kỹ thuật số chuẩn từng giây */
+.digital-countdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 35px;
+}
+
+.time-block {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 15px 25px;
+    border-radius: 16px;
+    min-width: 100px;
+    box-shadow: inset 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.time-block span {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    display: block;
+    line-height: 1;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+}
+
+.time-block p {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--accent-color); /* Màu Dusty Rose điệu đà */
+    margin-top: 8px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.time-divider {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.3);
+    padding-bottom: 28px;
+    animation: blinkClockDivider 1s infinite;
+}
+
+@keyframes blinkClockDivider {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.unlock-target-date {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    letter-spacing: 1px;
+}
+
+/* --- Giao diện sau khi mở khóa thành công --- */
+.envelope-icon {
+    font-size: 4.5rem;
+    color: #2ecc71;
+    margin-bottom: 20px;
+}
+
+.unlocked-header h3 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+}
+
+.unlocked-subtitle {
+    font-size: 1.1rem;
+    color: #bdc3c7;
+    margin-top: 5px;
+}
+
+.time-capsule-letter {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.55rem;
+    text-align: left;
+    line-height: 1.8;
+    color: #f5f6fa;
+    margin: 40px 0;
+    border-left: 4px solid var(--accent-color);
+    padding-left: 25px;
+}
+
+.time-capsule-letter p {
+    margin-bottom: 20px;
+}
+
+/* Co giãn linh hoạt trên Mobile */
+@media screen campaigners (max-width: 600px) {
+    .digital-countdown { gap: 6px; }
+    .time-block { min-width: 72px; padding: 12px 5px; border-radius: 10px; }
+    .time-block span { font-size: 1.8rem; }
+    .time-divider { font-size: 1.8rem; padding-bottom: 20px; }
+    .capsule-locked-block, .capsule-unlocked-block { padding: 40px 15px; }
+    .time-capsule-letter { font-size: 1.35rem; padding-left: 15px; }
+}
