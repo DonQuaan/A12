@@ -502,8 +502,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let clickCounts = {};
   let holdTimers = {};
 
-  program();
-
   reactionItems.forEach((item) => {
     const emoji = item.getAttribute("data-emoji");
     clickCounts[emoji] = 0;
