@@ -221,28 +221,23 @@
             </div>
         </div>
     </div>
-
-    <footer class="footer">
+<footer class="footer">
         <div class="container">
             <p>&copy; 2026 Lớp Chúng Minh - <i class="fas fa-heart"></i>9A12</p>
         </div>
     </footer>
-
-    <script src="style/script.js">
-        <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
         var ytPlayer;
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-video', {
                 events: {
                     'onStateChange': function(event) {
-                        // Số 1 tượng trưng cho trạng thái video ĐANG PHÁT (Playing)
                         if (event.data === 1) {
                             var bgMusic = document.getElementById('bg-music');
                             var playBtn = document.getElementById('mainPlayBtn');
                             var musicModal = document.getElementById('musicModal');
                             
-                            // Nếu nhạc nền đang bật thì tự động bấm Dừng (Pause) và đổi lại Icon
                             if (bgMusic && !bgMusic.paused) {
                                 bgMusic.pause();
                                 if (playBtn) playBtn.className = 'fas fa-play';
