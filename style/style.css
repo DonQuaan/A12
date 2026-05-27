@@ -2269,3 +2269,27 @@ body {
         max-width: 100%;
     }
 }
+
+.navbar {
+    position: fixed !important;  /* Khóa chết vị trí ở trên cùng viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999 !important;    /* Đảm bảo menu luôn nằm trên cùng, không bị các card hay video đè lên */
+    background: var(--glass-bg) !important; /* Sử dụng nền kính mờ thông minh tự động lật màu Sáng/Tối */
+    backdrop-filter: blur(12px) !important; /* Tạo hiệu ứng mờ hậu cảnh khi cuộn qua ảnh cực nghệ thuật */
+    -webkit-backdrop-filter: blur(12px) !important;
+    box-shadow: var(--shadow-soft) !important; /* Tạo vệt đổ bóng nhẹ tách biệt với nội dung dưới */
+    padding: 15px 0 !important;  /* Độ dày thanh menu vừa vặn, chuẩn chuyên nghiệp */
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Đảm bảo khoảng cách chữ trên PC thoáng đãng, không bị dí sát lề */
+.nav-links li {
+    margin-left: 35px !important;
+}
+
+/* Xóa bỏ hoàn toàn cấu hình ảnh logo cũ trên PC để tránh lỗi dôi dư bộ nhớ */
+.nav-logo-item, .nav-logo-img {
+    display: none !important;
+}
