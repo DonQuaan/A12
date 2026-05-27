@@ -228,7 +228,33 @@
         </div>
     </footer>
 
-    <script src="style/script.js"></script>
+    <script src="style/script.js">
+        <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        var ytPlayer;
+        function onYouTubeIframeAPIReady() {
+            ytPlayer = new YT.Player('yt-video', {
+                events: {
+                    'onStateChange': function(event) {
+                        // Số 1 tượng trưng cho trạng thái video ĐANG PHÁT (Playing)
+                        if (event.data === 1) {
+                            var bgMusic = document.getElementById('bg-music');
+                            var playBtn = document.getElementById('mainPlayBtn');
+                            var musicModal = document.getElementById('musicModal');
+                            
+                            // Nếu nhạc nền đang bật thì tự động bấm Dừng (Pause) và đổi lại Icon
+                            if (bgMusic && !bgMusic.paused) {
+                                bgMusic.pause();
+                                if (playBtn) playBtn.className = 'fas fa-play';
+                                if (musicModal) musicModal.classList.remove('playing');
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+    </script>
 </body>
 
 </html>
