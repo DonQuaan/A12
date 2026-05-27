@@ -2208,3 +2208,54 @@ body {
 .alert-content p {
     color: var(--text-color) !important;
 }
+
+/* ==================== TÙY CHỈNH LOGO MENU (PC & MOBILE) ==================== */
+
+/* --- THIẾT LẬP LOGO TRÊN PC --- */
+.nav-links {
+    display: flex;
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+.nav-logo-item {
+    margin-right: auto; /* Đẩy các liên kết khác sang phải nếu cần, hoặc bỏ qua nếu muốn nằm sát */
+    margin-left: 0 !important; /* Xóa margin-left mặc định của các li */
+}
+
+.nav-logo-img {
+    width: 45px; /* Kích thước nhỏ gọn tinh tế trên PC */
+    height: auto;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+    transform: scale(1.1); /* Hiệu ứng phóng to nhẹ khi di chuột */
+}
+
+/* Lật màu Logo ở chế độ TỐI (Dark Mode) để không bị chìm nền */
+/* Giả sử logo của bạn là chữ đen trên nền trong suốt. Nếu logo màu, có thể bỏ qua dòng filter này */
+[data-theme="dark"] .nav-logo-img {
+    filter: drop-shadow(0 2px 5px rgba(255,255,255,0.2)) brightness(1.5); 
+}
+
+/* --- THIẾT LẬP LOGO TRÊN MOBILE (KHI MỞ 3 GẠCH) --- */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        padding-top: 20px; /* Tạo khoảng trống phía trên */
+        justify-content: flex-start; /* Dồn nội dung lên trên thay vì center hoàn toàn */
+    }
+
+    .nav-logo-item {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 40px !important; /* Khoảng cách từ Logo đến "Trang Chủ" */
+        margin-right: 0;
+    }
+
+    .nav-logo-img {
+        width: 140px; /* Kích thước to, cân đối, không thô lỗ */
+        max-width: 80%; /* Chống tràn lề với màn hình siêu nhỏ */
+        filter: drop-shadow(0 5px 15px rgba(0,0,0,0.15)); /* Đổ bóng sang trọng */
+    }
+}
