@@ -295,7 +295,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   let currentIndex = 0;
-  let isShowingAll = true;
+  let isShowingAll = false;
 
   function getInitialItemsCount() {
     return window.innerWidth <= 768 ? 3 : 6;
