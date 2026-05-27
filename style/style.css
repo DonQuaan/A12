@@ -89,20 +89,19 @@ h1, h2, h3, .handwritten {
 
 
 /* Navigation */
+/* Navigation */
 .navbar {
-    position: fixed;
+    position: fixed; /* Khóa chặt trên cùng */
     top: 0;
+    left: 0;
     width: 100%;
     z-index: 1000;
-    padding: 20px 0;
-    transition: var(--transition-fast);
-}
-
-.navbar.scrolled {
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
+    padding: 15px 0;
+    background: var(--glass-bg); /* Kính mờ theo theme Sáng/Tối */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     box-shadow: var(--shadow-soft);
-    padding: 10px 0;
+    transition: var(--transition-fast);
 }
 
 .nav-container {
@@ -124,10 +123,11 @@ h1, h2, h3, .handwritten {
 .nav-links {
     display: flex;
     list-style: none;
+    align-items: center;
 }
 
 .nav-links li {
-    margin-left: 30px;
+    margin-left: 35px; /* Giãn cách chữ thoáng hơn */
 }
 
 .nav-links a {
@@ -140,6 +140,13 @@ h1, h2, h3, .handwritten {
 
 .nav-links a:hover {
     color: var(--primary-color);
+}
+
+/* --- LOGO TRÊN ĐIỆN THOẠI --- */
+.mobile-logo-item {
+    display: none; /* Ẩn trên máy tính */
+}
+
 }
 
 .music-btn {
@@ -887,13 +894,14 @@ h1, h2, h3, .handwritten {
 }
 
 .modal-card {
-    background: white;
+    background: var(--bg-light); 
     width: 90%;
     max-width: 480px;
     margin: auto;
     padding: 40px;
     border-radius: 32px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+    border: 1px solid rgba(116, 139, 167, 0.2); 
+    box-shadow: var(--shadow-premium);
     position: relative;
     transform: scale(0.9);
     opacity: 0;
@@ -1492,14 +1500,16 @@ h1, h2, h3, .handwritten {
 }
 
 .gate-card {
-    background: #ffffff;
-    padding: 30px 30px 45px 30px; /* Reduced top padding to accommodate image */
+    background: var(--card-bg); /* Sửa từ #ffffff */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 30px 30px 45px 30px;
     border-radius: 40px;
     text-align: center;
     max-width: 500px;
     width: 92%;
-    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(116, 139, 167, 0.1);
+    box-shadow: var(--shadow-premium);
+    border: 1px solid rgba(116, 139, 167, 0.2);
     animation: gateSlideUp 0.8s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -1529,21 +1539,20 @@ h1, h2, h3, .handwritten {
 
 .gate-btn {
     padding: 18px 10px;
-    border: 2px solid rgba(116, 139, 167, 0.1);
+    border: 2px solid rgba(116, 139, 167, 0.2);
     border-radius: 20px;
-    background: #f8fafc;
+    background: transparent; /* Sửa từ #f8fafc */
     color: var(--text-color);
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-}
 
 .gate-btn:hover {
     border-color: var(--primary-color);
-    background: white;
-    color: var(--primary-color);
+    background: var(--primary-color);
+    color: #ffffff; /* Hover nền xanh thì chữ phải Trắng */
     transform: translateY(-5px);
     box-shadow: 0 10px 30px rgba(116, 139, 167, 0.1);
 }
@@ -1554,16 +1563,16 @@ h1, h2, h3, .handwritten {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0.8);
-    background: white;
+    background: var(--card-bg); /* Sửa từ white */
     padding: 35px 50px;
     border-radius: 30px;
-    box-shadow: 0 50px 150px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-premium);
     z-index: 10001;
     opacity: 0;
     visibility: hidden;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     text-align: center;
-    border: 1px solid rgba(116, 139, 167, 0.1);
+    border: 1px solid rgba(116, 139, 167, 0.2);
 }
 
 .gate-alert.show {
