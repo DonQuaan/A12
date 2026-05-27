@@ -85,16 +85,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const members = [
     {
-      name: "GVCN Cô Dung",
-      nickname: "Cô Dung",
+      name: "Cô Mỹ Dung - GVCN K9",
+      nickname: "ÁNH DƯƠNG",
       quote: "Hành trình bất khả thi nhất chính là hành trình mà bạn không bao giờ chịu bắt đầu!",
       img: "style/img/ThanhVien/GVCN Cô Dung.jpg",
       hobbies: "Dạy học, Văn chương",
       message: "A12 thương mến! Mới ngày nào cô còn nhìn thấy những gương mặt bỡ ngỡ bước vào lớp với biết bao ngại ngùng của tuổi học trò, vậy mà hôm nay các em đã đứng trước ngưỡng cửa của những chia xa và trưởng thành. Bốn năm trôi qua không quá dài, nhưng đủ để lưu giữ biết bao kỷ niệm: những giờ học đầy tiếng cười, những lần cùng nhau cố gắng, những buổi ôn thi mệt nhoài và cả những khoảnh khắc vô tư chỉ tuổi học trò mới có. Có lẽ sau này, giữa bộn bề cuộc sống, các em sẽ chẳng nhớ hết những bài học trên trang giấy, nhưng cô tin các em sẽ luôn nhớ về nhau, nhớ về lớp học nhỏ đã từng là thanh xuân đẹp nhất của mình. Tuổi mười lăm của các em đẹp như khoảng trời tháng năm trong veo, rực rỡ và chẳng thể quay lại lần thứ hai. Thanh xuân của các em đã đi qua dưới mái trường này bằng tất cả sự hồn nhiên, nhiệt thành và những ước mơ còn dang dở phía trước. Mai này, khi mỗi người đi về một hướng, cô mong các em vẫn giữ cho mình sự tử tế, lòng biết ơn và ánh mắt dịu dàng dành cho cuộc sống. Hãy sống như những đóa hoa biết hướng về phía mặt trời, dù có lúc phải đi qua những ngày mưa gió. Cô chúc A12 sẽ bước vào kỳ thi tuyển sinh 10 với tâm thế bình tĩnh, tự tin và vững vàng nhất. Mong rằng những ước mơ các em đang nâng niu hôm nay sẽ trở thành hiện thực trong một ngày không xa. Và dù mai này các em có trở thành ai, đi đến nơi nào, cô vẫn luôn hy vọng rằng: khi nhớ về mái trường này, các em sẽ mỉm cười vì đã từng có một thanh xuân thật đẹp. Chúc các em thi thật tốt, đi thật xa và luôn giữ trong tim mình ngọn lửa của tuổi trẻ. Thương mến và tin tưởng.",
     },
     {
+      name: "Thầy Trịnh Quang Thạch - GVCN K8",
+      nickname: "Thầy Voi, ",
+      quote: "Hành trình bất khả thi nhất chính là hành trình mà bạn không bao giờ chịu bắt đầu!",
+      img: "style/img/ThanhVien/GVCN Cô Dung.jpg",
+      hobbies: "Dạy học, Địa Lý",
+      message: "A12 thương mến! Mới ngày nào cô còn nhìn thấy những gương mặt bỡ ngỡ bước vào lớp với biết bao ngại ngùng của tuổi học trò, vậy mà hôm nay các em đã đứng trước ngưỡng cửa của những chia xa và trưởng thành. Bốn năm trôi qua không quá dài, nhưng đủ để lưu giữ biết bao kỷ niệm: những giờ học đầy tiếng cười, những lần cùng nhau cố gắng, những buổi ôn thi mệt nhoài và cả những khoảnh khắc vô tư chỉ tuổi học trò mới có. Có lẽ sau này, giữa bộn bề cuộc sống, các em sẽ chẳng nhớ hết những bài học trên trang giấy, nhưng cô tin các em sẽ luôn nhớ về nhau, nhớ về lớp học nhỏ đã từng là thanh xuân đẹp nhất của mình. Tuổi mười lăm của các em đẹp như khoảng trời tháng năm trong veo, rực rỡ và chẳng thể quay lại lần thứ hai. Thanh xuân của các em đã đi qua dưới mái trường này bằng tất cả sự hồn nhiên, nhiệt thành và những ước mơ còn dang dở phía trước. Mai này, khi mỗi người đi về một hướng, cô mong các em vẫn giữ cho mình sự tử tế, lòng biết ơn và ánh mắt dịu dàng dành cho cuộc sống. Hãy sống như những đóa hoa biết hướng về phía mặt trời, dù có lúc phải đi qua những ngày mưa gió. Cô chúc A12 sẽ bước vào kỳ thi tuyển sinh 10 với tâm thế bình tĩnh, tự tin và vững vàng nhất. Mong rằng những ước mơ các em đang nâng niu hôm nay sẽ trở thành hiện thực trong một ngày không xa. Và dù mai này các em có trở thành ai, đi đến nơi nào, cô vẫn luôn hy vọng rằng: khi nhớ về mái trường này, các em sẽ mỉm cười vì đã từng có một thanh xuân thật đẹp. Chúc các em thi thật tốt, đi thật xa và luôn giữ trong tim mình ngọn lửa của tuổi trẻ. Thương mến và tin tưởng.",
+    },
+    {
       name: "Bùi Chí Thành",
-      nickname: "Thành",
+      nickname: "Con Bot mạnh nhất lịch sử",
       quote: "Tất cả chúng ta đều đang nằm dưới rãnh nước, nhưng vài người trong số chúng ta vẫn đang ngước nhìn những vì sao.",
       img: "style/img/ThanhVien/Bùi Chí Thành.jpg",
       hobbies: "Cafe, nghe nhạc",
@@ -102,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Chu Trịnh Gia Bảo",
-      nickname: "Bảo",
+      nickname: "Chật nít Gas",
       quote: "Không ai có thể làm cho bạn cảm thấy kém cỏi nếu không có sự cho phép của chính bạn.",
       img: "style/img/ThanhVien/Chu Trịnh Gia Bảo.jpg",
       hobbies: "Chơi Game, Nghe nhạc",
@@ -110,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Hồ Minh Khôi",
-      nickname: "Khôi",
+      nickname: "Khôi (me myy)",
       quote: "Hãy trở thành sự thay đổi mà bạn muốn nhìn thấy trên thế giới này.",
       img: "style/img/ThanhVien/Hồ Minh Khôi.jpg",
       hobbies: "Nấu ăn, Chơi game",
@@ -118,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Hồ Tường An",
-      nickname: "An",
+      nickname: "An An",
       quote: "Dù bạn nghĩ rằng mình có thể hay không thể, bạn đều đúng cả.",
       img: "style/img/ThanhVien/Hồ Tường An.jpg",
       hobbies: "Piano, Vẽ tranh",
@@ -134,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Huỳnh Thị Cát Hồng",
-      nickname: "Hồng",
+      nickname: "Pink Sand",
       quote: "Hãy như nước, mềm mại lách qua những khe nứt. Đừng cứng nhắc, hãy dọn sạch tâm trí, tĩnh tại và linh hoạt như nước.",
       img: "style/img/ThanhVien/Huỳnh Thị Cát Hồng.jpg",
       hobbies: "Sách, âm nhạc, lịch sử",
@@ -142,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Lâm Quang Chánh",
-      nickname: "Chánh",
+      nickname: "Anh Lớn",
       quote: "Việc bạn đi chậm thế nào không quan trọng, miễn là bạn đừng bao giờ dừng lại..",
       img: "style/img/ThanhVien/Lâm Quang Chánh.jpg",
       hobbies: "Game, Du lịch",
@@ -150,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Lê Thành Nhân",
-      nickname: "Nhân",
+      nickname: "Skibidi",
       quote: "Hãy nhắm tới mặt trăng. Dù có trượt, bạn cũng sẽ hạ cánh giữa những vì sao.",
       img: "style/img/ThanhVien/Lê Thành Nhân.jpg",
       hobbies: "Xem phim, chơi game",
@@ -166,7 +174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Ngô Thái Bảo Uyên",
-      nickname: "Uyên",
+      nickname: "Bảo Uyên",
       quote: "Những người nhảy múa thường bị coi là điên rồ bởi những kẻ không thể nghe thấy tiếng nhạc.",
       img: "style/img/ThanhVien/Ngô Thái Bảo Uyên.jpg",
       hobbies: "Quay phim, Nghe nhạc",
@@ -182,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Nguyễn Đỗ Gia Huy",
-      nickname: "Huy",
+      nickname: "TOP 1 HSG Tin",
       quote: "Bạn không thể bơi đến những chân trời mới cho đến khi có đủ can đảm để không còn nhìn thấy bờ.",
       img: "style/img/ThanhVien/Nguyễn Đỗ Gia Huy.jpg",
       hobbies: "Du lịch, chụp ảnh",
@@ -222,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Nguyễn Vũ Đông Quân",
-      nickname: "Quân",
+      nickname: "Haruka donkai",
       quote: "Điều quan trọng không phải là chuyện gì xảy ra với bạn, mà là cách bạn phản ứng với nó.",
       img: "style/img/ThanhVien/Nguyễn Vũ Đông Quân.jpg",
       hobbies: "Sáng tạo nội dung, Truyền cảm hứng",
@@ -230,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Phạm Trần Song Thư",
-      nickname: "Thư",
+      nickname: "Chị Cả",
       quote: "Thấu hiểu bản thân là khởi nguồn của mọi sự thông thái.",
       img: "style/img/ThanhVien/Phạm Trần Song Thư.jpg",
       hobbies: "Sách, âm nhạc",
@@ -238,7 +246,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Phạm Vũ Huy Quỳnh",
-      nickname: "Quỳnh",
+      nickname: "Quỳnh peo",
       quote: "Chỉ khi ở trong tận cùng của bóng tối, bạn mới có thể nhìn thấy những vì sao.",
       img: "style/img/ThanhVien/Phạm Vũ Huy Quỳnh.jpg",
       hobbies: "Làm đẹp, Mạng xã hội",
@@ -254,7 +262,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Phạm Xuân Trọng",
-      nickname: "Trọng",
+      nickname: "Vua Trò Chơi",
       quote: "Những gì rớt lại phía sau và những gì đang chờ phía trước đều vô cùng nhỏ bé so với những gì nằm bên trong chúng ta.",
       img: "style/img/ThanhVien/Phạm Xuân Trọng.jpg",
       hobbies: "Game, bạn bè cùng nhau",
@@ -262,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Trần Bình Minh",
-      nickname: "Minh",
+      nickname: "HSXS HOÁ",
       quote: "Hành trình vạn dặm luôn bắt đầu từ một bước chân.",
       img: "style/img/ThanhVien/Trần Bình Minh.jpg",
       hobbies: "Hoá học, khoa học tự nhiên",
@@ -270,7 +278,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Trần Khải Hoàn",
-      nickname: "Hoàn",
+      nickname: "Chị đại",
       quote: "Cuộc sống không phải là quá trình đi tìm bản thân mình. Cuộc sống là quá trình tự kiến tạo nên chính mình.",
       img: "style/img/ThanhVien/Trần Khải Hoàn.jpg",
       hobbies: "Men, Lịch sử",
@@ -278,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       name: "Trần Văn Nhật Quang",
-      nickname: "Quang",
+      nickname: "7.5 ielts",
       quote: "Thời gian của bạn là hữu hạn, đừng lãng phí nó để sống cuộc đời của người khác.",
       img: "style/img/ThanhVien/Trần Văn Nhật Quang.jpg",
       hobbies: "Ngoại ngữ, Chơi Game",
@@ -295,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   let currentIndex = 0;
-  let isShowingAll = true;
+  let isShowingAll = false;
 
   function getInitialItemsCount() {
     return window.innerWidth <= 768 ? 3 : 6;
