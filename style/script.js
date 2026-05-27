@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Cô Dung",
       quote: "Hành trình bất khả thi nhất chính là hành trình mà bạn không bao giờ chịu bắt đầu!",
       img: "style/img/ThanhVien/GVCN Cô Dung.jpg",
-      hobbies: "Dạy học, Văn học",
+      hobbies: "Dạy học, Văn chương",
       message: "A12 thương mến! Mới ngày nào cô còn nhìn thấy những gương mặt bỡ ngỡ bước vào lớp với biết bao ngại ngùng của tuổi học trò, vậy mà hôm nay các em đã đứng trước ngưỡng cửa của những chia xa và trưởng thành. Bốn năm trôi qua không quá dài, nhưng đủ để lưu giữ biết bao kỷ niệm: những giờ học đầy tiếng cười, những lần cùng nhau cố gắng, những buổi ôn thi mệt nhoài và cả những khoảnh khắc vô tư chỉ tuổi học trò mới có. Có lẽ sau này, giữa bộn bề cuộc sống, các em sẽ chẳng nhớ hết những bài học trên trang giấy, nhưng cô tin các em sẽ luôn nhớ về nhau, nhớ về lớp học nhỏ đã từng là thanh xuân đẹp nhất của mình. Tuổi mười lăm của các em đẹp như khoảng trời tháng năm trong veo, rực rỡ và chẳng thể quay lại lần thứ hai. Thanh xuân của các em đã đi qua dưới mái trường này bằng tất cả sự hồn nhiên, nhiệt thành và những ước mơ còn dang dở phía trước. Mai này, khi mỗi người đi về một hướng, cô mong các em vẫn giữ cho mình sự tử tế, lòng biết ơn và ánh mắt dịu dàng dành cho cuộc sống. Hãy sống như những đóa hoa biết hướng về phía mặt trời, dù có lúc phải đi qua những ngày mưa gió. Cô chúc A12 sẽ bước vào kỳ thi tuyển sinh 10 với tâm thế bình tĩnh, tự tin và vững vàng nhất. Mong rằng những ước mơ các em đang nâng niu hôm nay sẽ trở thành hiện thực trong một ngày không xa. Và dù mai này các em có trở thành ai, đi đến nơi nào, cô vẫn luôn hy vọng rằng: khi nhớ về mái trường này, các em sẽ mỉm cười vì đã từng có một thanh xuân thật đẹp. Chúc các em thi thật tốt, đi thật xa và luôn giữ trong tim mình ngọn lửa của tuổi trẻ. Thương mến và tin tưởng.",
     },
     {
@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Manh",
       quote: "Trí tưởng tượng còn quan trọng hơn cả kiến thức. Kiến thức là hữu hạn, còn trí tưởng tượng bao trùm cả thế giới.",
       img: "style/img/ThanhVien/Nguyễn Lê Minh Anh.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Ăn, Game",
       message: "Ánh sáng của tuổi trẻ không nằm ở những điều lớn lao, mà ở sự thuần khiết trong đáy mắt. Chúc cậu sau này dù nhìn thấy bao nhiêu góc khuất của cuộc đời, vẫn giữ được đôi mắt trong veo và tâm hồn tươi sáng.",
     },
     {
@@ -201,7 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Linh",
       quote: "Và một khi cơn bão qua đi, bạn sẽ không nhớ mình đã vượt qua nó như thế nào... Nhưng có một điều chắc chắn: Khi bước ra khỏi cơn bão, bạn sẽ không còn là người đã bước vào.",
       img: "style/img/ThanhVien/Nguyễn Lê Phương Linh.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Mạng xã hội, Làm đẹp",
       message: "Chiếc lá bàng rơi nghiêng ngoài cửa sổ mang theo cả những năm tháng mộng mơ. Mong cuộc đời cậu sau này sẽ như một bản nhạc êm dịu, không cần quá ồn ào nhưng đủ sâu lắng và bình yên.",
     },
     {
@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Nguyên",
       quote: "Hãy tự tin bước đi theo hướng những giấc mơ của bạn. Hãy sống cuộc đời mà bạn đã từng tưởng tượng.",
       img: "style/img/ThanhVien/Nguyễn Thảo Nguyên.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Mạng xã hội, Giao lưu",
       message: "Bầu trời ngoài kia rộng lớn lắm, chim non rồi cũng phải rời tổ để tập bay. Chúc cậu đôi cánh thật vững chãi, bay qua giông bão để đón lấy ánh mặt trời rực rỡ nhất.",
     },
     {
@@ -225,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Quân",
       quote: "Điều quan trọng không phải là chuyện gì xảy ra với bạn, mà là cách bạn phản ứng với nó.",
       img: "style/img/ThanhVien/Nguyễn Vũ Đông Quân.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Sáng tạo nội dung, Truyền cảm hứng",
       message: "Mong bạn sau này chẳng cần ai định nghĩa mới biết mình là ai. Mỗi ngã rẽ đều là một bài học để ta hiểu về bản thân mình sâu sắc hơn. Chúc hành trình phía trước của bạn luôn đầy bản lĩnh và ngập tràn cảm hứng.",
     },
     {
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Thư",
       quote: "Thấu hiểu bản thân là khởi nguồn của mọi sự thông thái.",
       img: "style/img/ThanhVien/Phạm Trần Song Thư.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Sách, âm nhạc",
       message: "Lưu bút viết rồi nét mực cũng phai, chỉ có tình bạn mười tám đôi mươi là còn in dấu mãi. Chúc cậu viết nên những trang sách cuộc đời thật đẹp, nơi nhân vật chính là cậu luôn dũng cảm và rạng ngời.",
     },
     {
@@ -241,7 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Quỳnh",
       quote: "Chỉ khi ở trong tận cùng của bóng tối, bạn mới có thể nhìn thấy những vì sao.",
       img: "style/img/ThanhVien/Phạm Vũ Huy Quỳnh.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Làm đẹp, Mạng xã hội",
       message: "Đóa hoa Quỳnh chỉ nở rộ vào ban đêm, tỏa hương tĩnh lặng mà nồng nàn. Cậu cũng vậy, không cần ồn ào chứng tỏ, hãy cứ âm thầm nỗ lực và nở rộ vào thời khắc huy hoàng nhất của đời mình.",
     },
     {
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Châu",
       quote: "Hãy là chính mình, vì những người khác đã có người đóng mất rồi.",
       img: "style/img/ThanhVien/Tăng Khánh Châu.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Âm nhạc, yên bình",
       message: "Đóa hoa Quỳnh chỉ nở rộ vào ban đêm, tỏa hương tĩnh lặng mà nồng nàn. Cậu cũng vậy, không cần ồn ào chứng tỏ, hãy cứ âm thầm nỗ lực và nở rộ vào thời khắc huy hoàng nhất của đời mình.",
     },
     {
@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Trọng",
       quote: "Những gì rớt lại phía sau và những gì đang chờ phía trước đều vô cùng nhỏ bé so với những gì nằm bên trong chúng ta.",
       img: "style/img/ThanhVien/Phạm Xuân Trọng.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Game, bạn bè cùng nhau",
       message: "Tuổi xuân của chúng ta là những cơn mưa rào chẳng sợ ướt áo. Sau này ra đời, mong cậu luôn trân trọng những giá trị cốt lõi, sống một đời nhiệt thành, không hối tiếc, không thở dài.",
     },
     {
@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Minh",
       quote: "Hành trình vạn dặm luôn bắt đầu từ một bước chân.",
       img: "style/img/ThanhVien/Trần Bình Minh.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Hoá học, khoa học tự nhiên",
       message: "Khép lại cánh cửa trung học là mở ra muôn vàn những chân trời mới. Giống như cái tên của cậu, chúc mọi khởi đầu của cậu đều ngập tràn ánh sáng hy vọng và những điều tốt đẹp nhất.",
     },
     {
@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Hoàn",
       quote: "Cuộc sống không phải là quá trình đi tìm bản thân mình. Cuộc sống là quá trình tự kiến tạo nên chính mình.",
       img: "style/img/ThanhVien/Trần Khải Hoàn.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Men, Lịch sử",
       message: "Đường xa vạn dặm bắt đầu từ một bước chân. Dù sau này cậu đi đâu, làm gì, tớ vẫn luôn tin cậu sẽ mang về những chiến thắng rực rỡ. Chúc cậu một đời khúc ca khải hoàn luôn vang vọng.",
     },
     {
@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Quang",
       quote: "Thời gian của bạn là hữu hạn, đừng lãng phí nó để sống cuộc đời của người khác.",
       img: "style/img/ThanhVien/Trần Văn Nhật Quang.jpg",
-      hobbies: "Viết lách, Đi bộ",
+      hobbies: "Ngoại ngữ, Chơi Game",
       message: "Hãy sống như đóa hướng dương, luôn hướng về phía mặt trời thì bóng tối sẽ ngả về sau lưng cậu. Chúc cậu mang ánh sáng của sự tử tế và ấm áp lan tỏa đến mọi nơi cậu đặt chân tới.",
     },
     {
@@ -289,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
       nickname: "Huyền",
       quote: "Tương lai thuộc về những ai tin vào vẻ đẹp trong những giấc mơ của mình.",
       img: "style/img/ThanhVien/Vũ Khánh Huyền.jpg",
-      hobbies: "Viết lách, Thư giãn",
+      hobbies: "Viết lách, Piano",
       message: "Có những tháng năm trôi qua kẽ tay nhẹ như một tiếng thở dài, nhưng lại in sâu vào tâm trí mãi mãi. Chúc cậu giữ mãi nét huyền diệu của tuổi trẻ, sống một cuộc đời như một giấc mơ có thật, rực rỡ và an nhiên.",
     },
   ];
