@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
       quote: "Tất cả chúng ta đều đang nằm dưới rãnh nước, nhưng vài người trong số chúng ta vẫn đang ngước nhìn những vì sao.",
       img: "style/img/ThanhVien/Bùi Chí Thành.jpg",
       hobbies: "Cafe, nghe nhạc",
-      message: "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Sau này ra biển lớn, mong cậu giữ mãi sự chân thành và nhiệt huyết của tuổi mười tám. Chúc cậu một đời bình an, điệu cười vẫn rạng rỡ như ngày thuở nào.”,
+      message: "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Sau này ra biển lớn, mong cậu giữ mãi sự chân thành và nhiệt huyết của tuổi mười tám. Chúc cậu một đời bình an, điệu cười vẫn rạng rỡ như ngày thuở nào.",
     },
     {
       name: "Chu Trịnh Gia Bảo",
