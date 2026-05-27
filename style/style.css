@@ -2158,3 +2158,13 @@ body {
 .quiz-desc {
     color: var(--text-color) !important;
 }
+/* ==================== FIX RIÊNG CHO TIÊU ĐỀ CUỘN KÝ ỨC ==================== */
+/* Ép buộc phần tiêu đề Cuộn Ký Ức luôn giữ màu trắng tinh khiết ở cả giao diện sáng và tối */
+.timeline-parallax .section-title {
+    color: #ffffff !important;
+}
+
+/* Đảm bảo thanh gạch trang trí dưới chữ Cuộn Ký Ức luôn sáng rõ */
+.timeline-parallax .section-title::after {
+    background: linear-gradient(90deg, #ffffff, var(--secondary-color)) !important;
+}
