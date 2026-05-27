@@ -58,7 +58,7 @@ Mọi hành vi xâm phạm bản quyền sẽ bị coi là **vi phạm pháp lu�
 
 > *"Mã nguồn có thể dừng lại ở dòng lệnh cuối cùng, nhưng câu chuyện của chúng ta sẽ không bao giờ có dấu chấm hết."*
 
-Dù tài liệu này đã đi đến những dòng cuối, và dẫu dự án kỷ yếu này đã hoàn thành trọn vẹn sứ mệnh của nó, nhưng tôi tin rằng dư âm của những năm tháng ấy sẽ còn vang vọng mãi trong tim mỗi chúng ta. Cuốn kỷ yếu kỹ thuật số này không chỉ là một cỗ máy thời gian đóng băng những ký ức cũ, mà nó là một lời hứa thủy chung: Rằng dù thời gian có trôi đi bao lâu, dù dòng đời có cuốn chúng ta đến những phương trời xa lạ nào, góc nhỏ này của A12 vẫn luôn ở đây, vẹn nguyên, ấm áp và chờ đón các bạn trở về.
+Dù đã đi đến những dòng cuối, và dẫu dự án kỷ yếu này đã hoàn thành trọn vẹn sứ mệnh của nó, nhưng tôi tin rằng dư âm của những năm tháng ấy sẽ còn vang vọng mãi trong tim mỗi chúng ta. Cuốn kỷ yếu kỹ thuật số này không chỉ là một cỗ máy thời gian đóng băng những ký ức cũ, mà nó là một lời hứa thủy chung: Rằng dù thời gian có trôi đi bao lâu, dù dòng đời có cuốn chúng ta đến những phương trời xa lạ nào, góc nhỏ này của A12 vẫn luôn ở đây, vẹn nguyên, ấm áp và chờ đón các bạn trở về.
 
 Chúng ta đã cùng nhau vẽ nên một bức tranh tuổi trẻ rực rỡ và không thể phai mờ. Từ giờ phút này, mỗi cánh chim A12 sẽ tự do bay đi, viết tiếp những chương mới huy hoàng cho cuộc đời mình. Cầu chúc cho tất cả những thành viên của gia đình chúng ta sẽ luôn chân cứng đá mềm, kiên cường, thành công và bình an trên con đường sắp bước.
 
