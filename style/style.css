@@ -1359,3 +1359,30 @@ h1, h2, h3, .handwritten {
     pointer-events: none;
     visibility: hidden;
 }
+
+#profileMessage, 
+.profile-field span {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+.profile-modal .profile-body {
+    max-height: 250px;       
+    overflow-y: auto;        
+    padding-right: 10px;     
+}
+
+.profile-modal .profile-body::-webkit-scrollbar {
+    width: 6px;
+}
+.profile-modal .profile-body::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+}
+.profile-modal .profile-body::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+.profile-modal .profile-body::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
