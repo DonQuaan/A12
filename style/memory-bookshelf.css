@@ -14,66 +14,155 @@
     padding: clamp(60px, 8vw, 100px) 0;
     position: relative;
     z-index: 5;
+    overflow-x: hidden;
 }
 
 .bookshelf-wrapper {
     position: relative;
-    padding: 26px; 
+    padding: 20px; 
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    transition: filter 0.4s ease;
 }
 
-.bookshelf-grid {
+/* Depth of Field Effect: Bất kỳ sách nào được hover, làm mờ các sách khác */
+.bookshelf-wrapper:has(.book-spine:hover) .book-spine:not(:hover),
+.bookshelf-wrapper:has(.book-spine:hover) .decor-plant {
+    filter: blur(3px) brightness(0.6);
+    opacity: 0.7;
+}
+
+/* ================= HỆ THỐNG KỆ NHIỀU TẦNG ================= */
+#bookshelfGrid {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px; 
-    padding-bottom: 25px;
-    position: relative;
-    z-index: 2;
+    flex-direction: column;
+    gap: 50px; /* Khoảng cách giữa các tầng */
 }
 
-.shelf-board {
+.shelf-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+/* Ván gỗ cho từng tầng kệ */
+.shelf-board-row {
     position: absolute;
-    bottom: 30px;
+    bottom: 0;
     left: 2%;
     width: 96%;
     height: 15px;
     background: linear-gradient(to bottom, #dcb38a, #8e6538);
     border-radius: 5px;
-    box-shadow: 0 15px 20px rgba(0,0,0,0.3);
+    box-shadow: 0 15px 20px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.2);
     z-index: 1;
 }
 
-.book-spine {
+/* ================= TRANG TRÍ ================= */
+.decor-plant {
     width: 40px;
-    height: 180px;
-    border-radius: 4px 8px 8px 4px;
+    height: 60px;
+    background: url('https://i.postimg.cc/85z1X5J4/plant-png.png') no-repeat bottom center;
+    background-size: contain;
+    position: relative;
+    z-index: 2;
+    margin: 0 15px;
+    transition: filter 0.4s ease;
+    pointer-events: none;
+}
+
+/* ================= THẾ DÁNG SÁCH (POSTURES) ================= */
+.book-spine {
+    width: clamp(35px, 4vw, 42px);
+    height: clamp(140px, 15vw, 170px);
+    border-radius: 3px 6px 6px 3px;
     position: relative;
     cursor: pointer;
-    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.3);
-    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s ease;
+    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 3px 5px 10px rgba(0,0,0,0.4);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), filter 0.4s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    z-index: 3;
+    will-change: transform, filter;
+    transform-origin: bottom center;
 }
 
-.book-spine::after {
+.posture-upright { transform: rotate(0deg); }
+.posture-lean-left { transform: rotate(-8deg); margin-left: -5px; }
+.posture-lean-right { transform: rotate(10deg); margin-right: -5px;}
+
+/* Sách đặt nằm ngang (Chồng lên nhau) */
+.book-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 3;
+}
+.book-stack .book-spine {
+    width: clamp(130px, 14vw, 160px);
+    height: clamp(25px, 3vw, 32px);
+    border-radius: 2px 4px 4px 2px;
+    transform-origin: center center;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    margin-bottom: -1px;
+}
+.book-stack .book-spine .spine-text {
+    writing-mode: horizontal-tb;
+    transform: rotate(0);
+    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+}
+
+/* Hover mượt mà rút sách ra */
+.book-spine:hover {
+    transform: translateY(-25px) scale(1.08) !important;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.5), inset 4px 0 10px rgba(255,255,255,0.2);
+    z-index: 100;
+}
+
+/* Tên nổi lên khi Hover */
+.spine-hover-label {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.spine-hover-label::after {
     content: '';
     position: absolute;
-    left: 4px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: rgba(255,255,255,0.3);
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
 }
 
-.book-spine:hover {
-    transform: translateY(-12px) scale(1.05);
-    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 10px 15px 25px rgba(0,0,0,0.5);
+.book-spine:hover .spine-hover-label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .spine-text {
@@ -86,8 +175,36 @@
     color: rgba(255,255,255,0.95);
     letter-spacing: 1px;
     white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
+/* ================= 10 KIỂU BÌA SÁCH PREMIUM ================= */
+/* 1. Da đỏ cổ điển */
+.style-1 { background: #5a1811; border-left: 3px solid #8e2b22; box-shadow: inset 5px 0 10px rgba(0,0,0,0.4); }
+/* 2. Xanh Navy mạ vàng */
+.style-2 { background: #1a2530; background-image: repeating-linear-gradient(0deg, transparent, transparent 20px, #d4af37 20px, #d4af37 23px); color: #d4af37;}
+/* 3. Vải Canvas Be */
+.style-3 { background: #c2b29f; border-left: 2px solid #a3917d; color: #3e3226; text-shadow: none;}
+/* 4. Ngọc lục bảo */
+.style-4 { background: #0e4f3a; border-left: 4px solid #167a5a; }
+/* 5. Tím hoàng gia */
+.style-5 { background: #371b4a; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 4px); }
+/* 6. Xám nhám */
+.style-6 { background: #3a4047; border-left: 2px solid #555e68; }
+/* 7. Nâu Đất sần */
+.style-7 { background: #6b4423; box-shadow: inset 8px 0 15px rgba(0,0,0,0.5); }
+/* 8. Hồng đất Minimal */
+.style-8 { background: #a56a65; border-left: 3px solid #d49a89; }
+/* 9. Xanh Cổ Vịt */
+.style-9 { background: #125c61; border-right: 2px solid #23a0a8; }
+/* 10. Đen tuyền nhũ bạc */
+.style-10 { background: #111; color: #e0e0e0; background-image: repeating-linear-gradient(0deg, transparent, transparent 40px, #aaa 40px, #aaa 42px);}
+
+.style-2 .spine-text, .style-3 .spine-text, .style-10 .spine-text {
+    text-shadow: none;
+}
+
+/* ================= MODAL & FLIPBOOK (Giữ nguyên tối ưu) ================= */
 .book-modal {
     display: none !important; 
     position: fixed;
@@ -96,150 +213,38 @@
     backdrop-filter: blur(15px);
     z-index: 10000;
 }
-
 .book-modal.modal-active { display: flex !important; }
-
 .book-modal-content {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: relative; width: 100%; height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-
 .close-book {
-    position: absolute;
-    top: 30px;
-    right: 40px;
-    font-size: 2.5rem;
-    color: white;
-    cursor: pointer;
-    z-index: 10100;
-    transition: transform 0.3s ease;
+    position: absolute; top: 30px; right: 40px; font-size: 2.5rem; color: white; cursor: pointer; z-index: 10100; transition: transform 0.3s ease;
 }
-
 .close-book:hover { transform: rotate(90deg); }
-
-.scene {
-    width: min(900px, 90vw);
-    height: min(600px, 70vh);
-    perspective: 1500px; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.book {
-    width: 50%;
-    height: 100%;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.book-page {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    transform-origin: left center;
-    transform-style: preserve-3d;
-    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
-    border-radius: 0 12px 12px 0;
-    cursor: pointer;
-}
-
-.page-front, .page-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-    background-color: var(--book-paper); 
-    color: var(--book-text-color);
-    border-radius: 0 12px 12px 0;
-    box-shadow: inset 4px 0 20px var(--book-shadow-color), 2px 5px 15px rgba(0,0,0,0.2);
-    overflow: hidden;
-}
-
-.page-back {
-    transform: rotateY(180deg);
-    border-radius: 12px 0 0 12px;
-    box-shadow: inset -4px 0 20px var(--book-shadow-color), -2px 5px 15px rgba(0,0,0,0.2);
-}
-
+.scene { width: min(900px, 90vw); height: min(600px, 70vh); perspective: 1500px; display: flex; justify-content: center; align-items: center; }
+.book { width: 50%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.book-page { position: absolute; width: 100%; height: 100%; top: 0; left: 0; transform-origin: left center; transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1); border-radius: 0 12px 12px 0; cursor: pointer; }
+.page-front, .page-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background-color: var(--book-paper); color: var(--book-text-color); border-radius: 0 12px 12px 0; box-shadow: inset 4px 0 20px var(--book-shadow-color), 2px 5px 15px rgba(0,0,0,0.2); overflow: hidden; }
+.page-back { transform: rotateY(180deg); border-radius: 12px 0 0 12px; box-shadow: inset -4px 0 20px var(--book-shadow-color), -2px 5px 15px rgba(0,0,0,0.2); }
 .page-flipped { transform: rotateY(-180deg); }
-
-.page-content {
-    padding: 26px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.polaroid {
-    width: 85%;
-    height: 75%;
-    background: white;
-    padding: 10px 10px 40px 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    border-radius: 4px;
-    transform: rotate(-1deg);
-}
-
-.polaroid img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* HIỂN THỊ TRỌN VẸN 100% ẢNH GỐC */
-    border-radius: 2px;
-    background: rgba(0, 0, 0, 0.03); /* Lót nền khi ảnh dọc/ngang không khớp khung */
-}
-
-.quote-page {
-    background: repeating-linear-gradient(transparent, transparent 31px, rgba(116, 139, 167, 0.15) 31px, rgba(116, 139, 167, 0.15) 32px);
-    background-position: 0 20px;
-    font-family: 'Dancing Script', cursive;
-    font-size: clamp(1.2rem, 2vw, 1.6rem);
-    line-height: 32px;
-    padding: 40px;
-    text-align: center;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-}
-
-.book-controls {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.book-nav-btn {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: white;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-}
-
+.page-content { padding: 26px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.polaroid { width: 85%; height: 75%; background: white; padding: 10px 10px 40px 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-radius: 4px; transform: rotate(-1deg); }
+.polaroid img { width: 100%; height: 100%; object-fit: contain; border-radius: 2px; background: rgba(0, 0, 0, 0.03); }
+.quote-page { background: repeating-linear-gradient(transparent, transparent 31px, rgba(116, 139, 167, 0.15) 31px, rgba(116, 139, 167, 0.15) 32px); background-position: 0 20px; font-family: 'Dancing Script', cursive; font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 32px; padding: 40px; text-align: center; word-wrap: break-word; overflow-wrap: break-word; }
+.book-controls { display: flex; align-items: center; gap: 30px; margin-top: 30px; }
+.book-nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px); transition: all 0.3s ease; }
 .book-nav-btn:hover { background: var(--primary-color); border-color: var(--primary-color); }
 .page-indicator { color: white; font-weight: 600; font-family: 'Inter', sans-serif; letter-spacing: 2px; }
-
-.book-loader { color: white; text-align: center; font-family: 'Inter', sans-serif;}
+.book-loader { color: white; text-align: center; font-family: 'Inter', sans-serif; margin-bottom: 20px;}
 .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;}
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
 @media screen and (max-width: 768px) {
-    .bookshelf-grid { gap: 16px; }
-    .book-spine { width: 30px; height: 140px; }
+    .shelf-row { gap: 8px; padding-bottom: 12px; }
+    .book-spine { width: 32px; height: 130px; }
+    .book-stack .book-spine { width: 110px; height: 25px; }
+    .decor-plant { width: 30px; height: 45px; margin: 0 5px; }
     .scene { width: 95vw; perspective: 2500px; }
     .book { width: 100%; }
     .page-back { display: none; }
