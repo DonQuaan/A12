@@ -2269,3 +2269,238 @@ body {
         max-width: 100%;
     }
 }
+/* ================= MEMORY BOOKSHELF ================= */
+.bookshelf-section {
+    padding: clamp(60px, 8vw, 100px) 0;
+    position: relative;
+}
+
+.bookshelf-wrapper {
+    position: relative;
+    padding: calc(16px * 1.618);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.bookshelf-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: calc(20px * 1.618);
+    padding-bottom: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.shelf-board {
+    position: absolute;
+    bottom: 30px;
+    left: 5%;
+    width: 90%;
+    height: 15px;
+    background: linear-gradient(to bottom, #dcb38a, #b38b62);
+    border-radius: 5px;
+    box-shadow: 0 15px 20px rgba(0,0,0,0.4);
+    z-index: 1;
+}
+
+/* Sách trên kệ */
+.book-spine {
+    width: clamp(35px, 4vw, 45px);
+    height: clamp(140px, 15vw, 180px);
+    border-radius: 4px 8px 8px 4px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.3);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.book-spine::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255,255,255,0.3); /* Đường rãnh gáy sách */
+}
+
+.book-spine:hover {
+    transform: translateY(-12px) scale(1.05);
+    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 10px 15px 25px rgba(0,0,0,0.4);
+}
+
+.spine-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* ================= 3D FLIPBOOK MODAL ================= */
+.book-modal {
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(15px);
+}
+
+.book-modal-content {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-book {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 2.5rem;
+    color: white;
+    cursor: pointer;
+    z-index: 2000;
+    transition: transform 0.3s ease;
+}
+
+.close-book:hover { transform: rotate(90deg); }
+
+/* Khung cảnh 3D */
+.scene {
+    width: min(900px, 90vw);
+    height: min(600px, 70vh);
+    perspective: 1500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.book {
+    width: 50%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.book-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+    border-radius: 0 12px 12px 0;
+    cursor: pointer;
+}
+
+/* THEME ISOLATION - Ép buộc sách giữ màu giấy */
+.page-front, .page-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    background-color: #fdfbf7 !important; 
+    border-radius: 0 12px 12px 0;
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.05), 0 0 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    color: #2c3e50 !important;
+}
+
+.page-back {
+    transform: rotateY(180deg);
+    border-radius: 12px 0 0 12px;
+}
+
+.page-flipped {
+    transform: rotateY(-180deg);
+}
+
+/* Bố cục trang */
+.page-content {
+    padding: calc(16px * 1.618);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.polaroid {
+    width: 85%;
+    height: 70%;
+    background: white;
+    padding: 10px 10px 35px 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    border-radius: 4px;
+    transform: rotate(-2deg);
+}
+
+.polaroid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+    background: #e0e0e0; /* Placeholder */
+}
+
+.quote-page {
+    background: repeating-linear-gradient(transparent, transparent 31px, rgba(116, 139, 167, 0.2) 31px, rgba(116, 139, 167, 0.2) 32px);
+    background-position: 0 20px;
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    line-height: 32px;
+    padding: 40px;
+    text-align: center;
+}
+
+.book-controls {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.book-nav-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+}
+
+.book-nav-btn:hover { background: var(--primary-color); border-color: var(--primary-color); }
+
+.page-indicator { color: white; font-weight: 600; font-family: 'Inter', sans-serif; letter-spacing: 2px; }
+
+/* Loader */
+.book-loader { color: white; text-align: center; font-family: 'Inter', sans-serif;}
+.spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Mobile Logic */
+@media screen and (max-width: 768px) {
+    .scene { width: 95vw; perspective: 2500px; }
+    .book { width: 100%; }
+    .page-back { display: none; /* Tối giản mặt sau trên mobile để giữ layout thẳng */ }
+    .polaroid { width: 100%; height: 80%; transform: rotate(0); padding: 5px; }
+    .quote-page { padding: 20px; font-size: 1.4rem; }
+}
