@@ -13,7 +13,155 @@ document.addEventListener("DOMContentLoaded", () => {
   // SFX for verification
   const correctSfx = new Audio("style/question/correct.mp3");
   const wrongSfx = new Audio("style/question/wrong.mp3");
+// ==================== HỆ THỐNG FLIPBOOK ĐỘNG TỐI ƯU ====================
+    const deskGrid = document.getElementById('deskGrid');
+    const flipbookModal = document.getElementById('flipbookModal');
+    const flipbookWrapper = document.getElementById('flipbookWrapper');
+    const closeFlipbook = document.querySelector('.close-flipbook');
+    const loadingText = document.createElement('div');
+    loadingText.className = 'fb-loading';
+    loadingText.innerText = 'Đang lục tìm ký ức...';
+    if(flipbookModal) flipbookModal.appendChild(loadingText);
 
+    // Mảng Quotes ngẫu nhiên chuẩn form "Lưu bút"
+    const youthQuotes = [
+        "Thanh xuân là cơn mưa rào, dẫu cảm lạnh vẫn muốn tắm lại lần nữa.",
+        "Mỗi nụ cười ngày đó, giờ là kho báu vô giá.",
+        "Năm tháng trôi qua, chỉ có ánh mắt ấy là không đổi thay.",
+        "Tuổi 15 rực rỡ, ta đã có mọi thứ, kể cả sự ngây ngô.",
+        "Cảm ơn vì đã xuất hiện trong thanh xuân của tôi.",
+        "Góc sân trường ngày đó, còn vương mãi tiếng cười.",
+        "Tạm biệt nhé, những ngày tháng vô lo vô nghĩ."
+    ];
+
+    // Trích xuất 26 cái tên từ biến members có sẵn ở trên
+    const bookNames = members.map(m => m.name.split('-')[0].trim());
+
+    // 1. Render tủ sách vật lý
+    if (deskGrid) {
+        bookNames.forEach(name => {
+            const spine = document.createElement('div');
+            spine.className = 'book-spine';
+            spine.innerHTML = `<span>${name}</span>`;
+            spine.onclick = () => openFlipbook(name);
+            deskGrid.appendChild(spine);
+        });
+    }
+
+    // 2. Thuật toán Image Probing Đệ Quy
+    function probeImages(studentName) {
+        return new Promise(resolve => {
+            let validUrls = [];
+            let index = 1;
+            function checkNext() {
+                const img = new Image();
+                // Đường dẫn chuẩn theo file structure yêu cầu
+                const url = `style/img/Bookmember/${studentName}/Anh (${index}).jpg`;
+                
+                img.onload = () => {
+                    validUrls.push(url);
+                    index++;
+                    checkNext();
+                };
+                img.onerror = () => resolve(validUrls); // Gặp lỗi 404 (hết ảnh) thì dừng
+                img.src = url;
+            }
+            checkNext();
+        });
+    }
+
+    // 3. Xây dựng Virtual DOM Flipbook
+    async function openFlipbook(studentName) {
+        flipbookModal.style.display = 'flex';
+        loadingText.style.display = 'block';
+        flipbookWrapper.innerHTML = ''; 
+        
+        // Cân bằng trục X khi mở sách
+        flipbookWrapper.style.transform = 'translateX(0)'; 
+
+        const imgUrls = await probeImages(studentName);
+        loadingText.style.display = 'none';
+
+        if (imgUrls.length === 0) {
+            flipbookWrapper.innerHTML = `<div style="color:#fff;text-align:center;width:100%;margin-top:50%;">Chưa có dữ liệu ảnh cho ${studentName}</div>`;
+            return;
+        }
+
+        // Setup DOM Sách
+        let totalPages = Math.ceil(imgUrls.length / 2) + 1; // +1 cho bìa sách
+        let htmlContext = '';
+        let zIndexCounter = totalPages;
+
+        // Trang Bìa
+        htmlContext += `
+            <div class="fb-page" style="z-index: ${zIndexCounter};" data-page="0">
+                <div class="fb-front fb-cover"><h2>${studentName}</h2></div>
+                <div class="fb-back">
+                    <div class="fb-img-container"><img src="${imgUrls[0]}" alt="Memory"></div>
+                    <p class="fb-quote">"${youthQuotes[0 % youthQuotes.length]}"</p>
+                </div>
+            </div>
+        `;
+        zIndexCounter--;
+
+        // Các trang nội dung
+        let imgIndex = 1;
+        for (let i = 1; i < totalPages; i++) {
+            const frontImg = imgUrls[imgIndex] ? `<div class="fb-img-container"><img src="${imgUrls[imgIndex]}" alt="Memory"></div><p class="fb-quote">"${youthQuotes[imgIndex % youthQuotes.length]}"</p>` : '';
+            imgIndex++;
+            const backImg = imgUrls[imgIndex] ? `<div class="fb-img-container"><img src="${imgUrls[imgIndex]}" alt="Memory"></div><p class="fb-quote">"${youthQuotes[imgIndex % youthQuotes.length]}"</p>` : '';
+            imgIndex++;
+
+            htmlContext += `
+                <div class="fb-page" style="z-index: ${zIndexCounter};" data-page="${i}">
+                    <div class="fb-front">${frontImg}</div>
+                    <div class="fb-back">${backImg}</div>
+                </div>
+            `;
+            zIndexCounter--;
+        }
+
+        flipbookWrapper.innerHTML = htmlContext;
+
+        // Xử lý Logic Lật Sách vật lý
+        const pages = document.querySelectorAll('.fb-page');
+        let currentPage = 0;
+
+        pages.forEach((page, index) => {
+            page.addEventListener('click', function(e) {
+                // Kiểm tra click nửa trái hay nửa phải để xác định lật tới hay lùi
+                const rect = this.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                
+                if (clickX > rect.width / 2) {
+                    // Lật Tới
+                    if (currentPage < pages.length) {
+                        pages[currentPage].classList.add('flipped');
+                        // Fix Z-index Tearing
+                        pages[currentPage].style.zIndex = currentPage + 1;
+                        currentPage++;
+                        flipbookWrapper.style.transform = `translateX(${rect.width / 2}px)`;
+                    }
+                } else {
+                    // Lật Lùi
+                    if (currentPage > 0) {
+                        currentPage--;
+                        pages[currentPage].classList.remove('flipped');
+                        // Khôi phục Z-index
+                        pages[currentPage].style.zIndex = pages.length - currentPage;
+                        if(currentPage === 0) flipbookWrapper.style.transform = 'translateX(0)';
+                    }
+                }
+            });
+        });
+    }
+
+    if (closeFlipbook) {
+        closeFlipbook.addEventListener('click', () => {
+            flipbookModal.style.display = 'none';
+            flipbookWrapper.innerHTML = ''; // Garbage Collection: Xóa Node chống Leak RAM
+        });
+    }
   if (gatekeeper && gateAlert) {
     gateBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
