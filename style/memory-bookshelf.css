@@ -27,7 +27,6 @@
     transition: filter 0.4s ease;
 }
 
-/* Hiệu ứng làm mờ nền (Đã gỡ bỏ plant) */
 .bookshelf-wrapper:has(.book-spine:hover) .book-spine:not(:hover),
 .bookshelf-wrapper:has(.book-stack:hover) .book-stack:not(:hover),
 .bookshelf-wrapper:has(.book-stack:hover) .book-spine:not(:hover) {
@@ -63,7 +62,6 @@
     z-index: 1;
 }
 
-/* ================= POSTURES ================= */
 .book-spine {
     width: clamp(35px, 4vw, 42px);
     height: clamp(140px, 15vw, 170px);
@@ -112,7 +110,6 @@
     z-index: 100;
 }
 
-/* ================= LABEL TÊN BÊN HÔNG ================= */
 .spine-hover-label {
     position: absolute;
     top: 50%;
@@ -164,7 +161,6 @@
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
-/* 10 Bìa sách tĩnh */
 .style-1 { background: #5a1811; border-left: 3px solid #8e2b22; box-shadow: inset 5px 0 10px rgba(0,0,0,0.4); }
 .style-2 { background: #1a2530; background-image: repeating-linear-gradient(0deg, transparent, transparent 20px, #d4af37 20px, #d4af37 23px); color: #d4af37;}
 .style-3 { background: #c2b29f; border-left: 2px solid #a3917d; color: #3e3226; text-shadow: none;}
@@ -178,7 +174,6 @@
 
 .style-2 .spine-text, .style-3 .spine-text, .style-10 .spine-text { text-shadow: none; }
 
-/* ================= MODAL & SPINNER ================= */
 .book-modal {
     display: none !important; 
     position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -221,4 +216,15 @@
     margin: 0 auto 15px;
     border: none;
 }
-@keyframes customSpin { 100% { transform: rotate(36
+@keyframes customSpin { 100% { transform: rotate(360deg); } }
+
+@media screen and (max-width: 768px) {
+    .shelf-row { gap: 8px; padding-bottom: 12px; }
+    .book-spine { width: 32px; height: 130px; }
+    .book-stack .book-spine { width: 110px; height: 25px; }
+    .scene { width: 95vw; perspective: 2500px; }
+    .book { width: 100%; }
+    .page-back { display: none; }
+    .polaroid { width: 100%; height: 80%; transform: rotate(0); padding: 6px 6px 30px 6px; }
+    .quote-page { padding: 20px; font-size: 1.4rem; }
+}
