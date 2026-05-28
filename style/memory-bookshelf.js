@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const memoryCache = {}; 
     let currentlyViewing = null; 
 
-    // FALLBACK QUOTE (Chống sập giao diện nếu Quote.txt chưa kịp tải hoặc lỗi)
     let quoteList = [
         "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."
     ];
@@ -69,30 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
     async function loadQuotesFromFile() {
         try {
             const response = await fetch('style/Quote.txt');
-            if (!response.ok) return; // Bỏ qua nếu không tìm thấy file
+            if (!response.ok) return; 
             
             const text = await response.text();
-            // Regex hỗ trợ bắt mọi loại ngoặc kép (" ", “ ”) và lọc các dòng trống
             const parsedQuotes = [];
             const lines = text.split(/\r?\n/);
             
             lines.forEach(line => {
-                const trimmed = line.trim();
-                const match = trimmed.match(/^-\s*["“”](.*)["“”]$/);
+                // REGEX MỚI: Bắt lõi. Bất kể dấu đứng trước là gì, chỉ cần nằm trong ngoặc kép là thu thập
+                const match = line.match(/["“”]([^"“”]+)["“”]/);
                 if (match && match[1]) {
-                    parsedQuotes.push(match[1]);
+                    const quoteText = match[1].trim();
+                    if (quoteText.length > 0) { // Chặn chuỗi rỗng
+                        parsedQuotes.push(quoteText);
+                    }
                 }
             });
 
             if (parsedQuotes.length > 0) {
-                quoteList = parsedQuotes; // Đè mảng mặc định bằng dữ liệu từ File
+                quoteList = parsedQuotes; 
             }
         } catch (error) {
             console.warn("Chưa tải được Quote.txt, sử dụng Quote mặc định.");
         }
     }
 
-    // Hàm random trích dẫn
     function getRandomQuote() {
         const randomIndex = Math.floor(Math.random() * quoteList.length);
         return quoteList[randomIndex];
@@ -122,10 +122,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return spine;
     }
 
-    // KHỞI TẠO ĐỒNG THỜI KỆ SÁCH & TẢI QUOTE
     if (bookshelfGrid) {
         bookshelfGrid.innerHTML = ''; 
-        loadQuotesFromFile(); // Kích hoạt Fetch txt ngay lập tức
+        loadQuotesFromFile(); 
         
         libraryBlueprint.forEach(row => {
             const shelfRow = document.createElement("div");
@@ -263,7 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const page = document.createElement("div");
         page.className = "book-page";
         
-        // Random 1 câu Quote từ mảng đã load
         const randomQuote = getRandomQuote();
         
         page.innerHTML = `
