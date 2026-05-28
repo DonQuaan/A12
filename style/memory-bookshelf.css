@@ -199,6 +199,12 @@
 .page-content { padding: 26px; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .polaroid { width: 85%; height: 75%; background: white; padding: 10px 10px 40px 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-radius: 4px; transform: rotate(-1deg); }
 .polaroid img { width: 100%; height: 100%; object-fit: contain; border-radius: 2px; background: rgba(0, 0, 0, 0.03); }
+
+/* BẢO MẬT GIAO DIỆN TỪ PC ĐẾN MOBILE */
+.mobile-quote-box {
+    display: none; /* Khóa chết trên Desktop và iPad */
+}
+
 .quote-page { background: repeating-linear-gradient(transparent, transparent 31px, rgba(116, 139, 167, 0.15) 31px, rgba(116, 139, 167, 0.15) 32px); background-position: 0 20px; font-family: 'Dancing Script', cursive; font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 32px; padding: 40px; text-align: center; word-wrap: break-word; overflow-wrap: break-word; }
 .book-controls { display: flex; align-items: center; gap: 30px; margin-top: 30px; }
 .book-nav-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(5px); transition: all 0.3s ease; }
@@ -206,19 +212,10 @@
 .page-indicator { color: white; font-weight: 600; font-family: 'Inter', sans-serif; letter-spacing: 2px; }
 
 .book-loader { color: white; text-align: center; font-family: 'Inter', sans-serif; margin-bottom: 20px;}
-
-.spinner { 
-    width: 60px; 
-    height: 60px; 
-    background: url('https://i.postimg.cc/P5nMWJnM/Logo.png') no-repeat center center;
-    background-size: contain;
-    animation: customSpin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; 
-    margin: 0 auto 15px;
-    border: none;
-}
+.spinner { width: 60px; height: 60px; background: url('https://i.postimg.cc/P5nMWJnM/Logo.png') no-repeat center center; background-size: contain; animation: customSpin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite; margin: 0 auto 15px; border: none; }
 @keyframes customSpin { 100% { transform: rotate(360deg); } }
 
-/* ================= TỐI ƯU HÓA MOBILE (HIỂN THỊ QUOTE & CHỐNG TRÀN) ================= */
+/* ================= 1. GIAO DIỆN IPAD & TABLET (Giữ nguyên Flip 3D) ================= */
 @media screen and (max-width: 768px) {
     .shelf-row { gap: 8px; padding-bottom: 12px; }
     .book-spine { width: 32px; height: 130px; }
@@ -226,39 +223,65 @@
     
     .scene { width: 95vw; perspective: 2500px; }
     .book { width: 100%; }
+    .page-back { display: block; } /* Kích hoạt Flip cho Tablet */
+}
+
+/* ================= 2. GIAO DIỆN ĐIỆN THOẠI (Chuyển sang Dọc 1 chạm) ================= */
+@media screen and (max-width: 600px) {
+    .page-back { display: none !important; } /* Tắt lật mặt sau */
+    .page-front { width: 100%; height: 100%; }
+    .page-content { padding: 12px; justify-content: flex-start; }
     
-    /* GỠ BỎ LỆNH ẨN MẶT SAU. HIỂN THỊ QUOTE TRỞ LẠI */
-    .page-back { display: block; } 
-    
+    /* Ép Polaroid chiếm cứng 50% ở trên */
     .polaroid { 
-        width: 100%; 
-        height: 75%; 
+        width: 100%;
+        height: 52%; 
         transform: rotate(0); 
-        padding: 8px 8px 30px 8px; 
+        padding: 6px 6px 20px 6px; 
+        flex-shrink: 0;
     }
     
-    /* Tối ưu hiển thị Quote cho màn hình hẹp */
-    .quote-page { 
-        padding: 20px 15px; 
-        font-size: 1.1rem; 
-        line-height: 28px; /* Ép line-height cố định */
-        background: repeating-linear-gradient(transparent, transparent 27px, rgba(116, 139, 167, 0.15) 27px, rgba(116, 139, 167, 0.15) 28px);
-        background-position: 0 16px; /* Căn chỉnh dòng kẻ khớp với chữ trên mobile */
+    /* Đánh thức Box Ẩn - Chiếm nốt 48% dưới */
+    .mobile-quote-box {
+        display: flex !important;
+        flex-direction: column;
+        flex: 1; 
+        width: 100%;
+        margin-top: 15px;
+        overflow-y: auto;
+        background: repeating-linear-gradient(transparent, transparent 25px, rgba(116, 139, 167, 0.15) 25px, rgba(116, 139, 167, 0.15) 26px);
+        background-position: 0 16px;
+        padding: 10px 15px;
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.15rem;
+        line-height: 26px;
+        text-align: center;
+        border-radius: 8px;
+        border: 1px solid rgba(0,0,0,0.05);
     }
 
-    /* Thu nhỏ tên học sinh ở mặt Quote trên mobile */
-    .quote-page span {
-        font-size: 0.95rem !important;
-        margin-top: 15px !important;
+    .mobile-quote-box p { 
+        margin: auto 0; /* Căn giữa tự động nếu câu ngắn */
+        word-wrap: break-word;
     }
 
-    /* Thu nhỏ nút bấm điều hướng để không đè vào sách */
-    .book-controls {
-        gap: 20px;
-        margin-top: 20px;
+    .mobile-quote-box span {
+        display: block;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        font-family: 'Inter', sans-serif;
+        font-weight: 600;
+        color: var(--book-text-color);
     }
-    .book-nav-btn {
-        width: 40px;
-        height: 40px;
+    
+    /* Giao diện thanh cuộn gọn gàng cho điện thoại */
+    .mobile-quote-box::-webkit-scrollbar { width: 4px; }
+    .mobile-quote-box::-webkit-scrollbar-thumb {
+        background: rgba(106, 130, 158, 0.5);
+        border-radius: 4px;
     }
+
+    /* Thu nhỏ nút bấm */
+    .book-controls { gap: 20px; margin-top: 15px; }
+    .book-nav-btn { width: 40px; height: 40px; }
 }
