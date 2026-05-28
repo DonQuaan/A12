@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // BLUEPRINT TĨNH - ĐÃ XÓA SẠCH CHẬU CÂY TRANG TRÍ (PLANT)
+    // BLUEPRINT TĨNH - SƠ ĐỒ THƯ VIỆN CHUẨN XÁC 100%
     const libraryBlueprint = [
-        // --- TẦNG 1 (9 Học Sinh) ---
         [
             { type: "book", name: "Đông Quân", style: 1, post: "upright" },
             { type: "book", name: "Bình Minh", style: 2, post: "lean-left" },
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ]},
             { type: "book", name: "Hoàng Anh", style: 10, post: "lean-left" }
         ],
-        // --- TẦNG 2 (9 Học Sinh) ---
         [
             { type: "book", name: "Hoàng Cung", style: 5, post: "upright" },
             { type: "book", name: "Huỳnh Quỳnh", style: 1, post: "lean-right" },
@@ -33,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { type: "book", name: "Nhật Hoàn", style: 8, post: "lean-right" },
             { type: "book", name: "Nhật Quang", style: 9, post: "upright" }
         ],
-        // --- TẦNG 3 (8 Học Sinh) ---
         [
             { type: "stack", items: [
                 { name: "Phương Linh", style: 10 },
@@ -60,14 +57,14 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalPages = 0;
     let pagesDOM = [];
     
-    // SMART MEMORY CACHE
     const memoryCache = {}; 
     let currentlyViewing = null; 
 
+    // Mở rộng Cache để chứa Pattern file (Định dạng ảnh)
     libraryBlueprint.forEach(row => {
         row.forEach(item => {
-            if (item.type === "book") memoryCache[item.name] = { images: [], finished: false };
-            if (item.type === "stack") item.items.forEach(b => memoryCache[b.name] = { images: [], finished: false });
+            if (item.type === "book") memoryCache[item.name] = { images: [], finished: false, pattern: "Anh ($).webp" };
+            if (item.type === "stack") item.items.forEach(b => memoryCache[b.name] = { images: [], finished: false, pattern: "Anh ($).webp" });
         });
     });
 
@@ -119,22 +116,52 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ⚡ AUTO-HEAL ENGINE: Tự động vá lỗi định dạng ảnh của người dùng
+    async function fetchNextImage(name) {
+        const cache = memoryCache[name];
+        if (cache.finished) return false;
+        
+        const index = cache.images.length + 1;
+        
+        if (index === 1) {
+            // Quét qua 5 kiểu gõ sai phổ biến nhất
+            const patterns = [
+                "Anh ($).webp",
+                "Anh($).webp",
+                "Anh ($).jpg",
+                "anh ($).webp",
+                "Anh ($).png"
+            ];
+            for (let p of patterns) {
+                const url = `style/img/Bookmember/${name}/${p.replace('$', index)}`;
+                const res = await checkImageExistence(url);
+                if (res.exists) {
+                    cache.pattern = p; // Chốt quy tắc đúng cho các ảnh sau
+                    cache.images.push(res.url);
+                    return true;
+                }
+            }
+            cache.finished = true;
+            return false;
+        } 
+        
+        const url = `style/img/Bookmember/${name}/${cache.pattern.replace('$', index)}`;
+        const res = await checkImageExistence(url);
+        if (res.exists) {
+            cache.images.push(res.url);
+            return true;
+        } else {
+            cache.finished = true;
+            return false;
+        }
+    }
+
     async function startGlobalPreload() {
         const studentNames = Object.keys(memoryCache);
         for (let name of studentNames) {
-            let index = 1;
             while (!memoryCache[name].finished) {
                 if (currentlyViewing !== null && currentlyViewing !== name) break; 
-                
-                const url = `style/img/Bookmember/${name}/Anh (${index}).webp`;
-                const result = await checkImageExistence(url);
-                
-                if (result.exists) {
-                    memoryCache[name].images.push(result.url);
-                    index++;
-                } else {
-                    memoryCache[name].finished = true;
-                }
+                await fetchNextImage(name);
             }
         }
     }
@@ -160,20 +187,16 @@ document.addEventListener("DOMContentLoaded", () => {
             hideLoader();
         }
 
-        let index = memoryCache[studentName].images.length + 1;
         while (!memoryCache[studentName].finished) {
-            const url = `style/img/Bookmember/${studentName}/Anh (${index}).webp`;
-            const result = await checkImageExistence(url);
+            const success = await fetchNextImage(studentName);
             
+            // DOM GUARD: Chặn tuyệt đối ảnh từ luồng ngầm nhảy sai Modal
             if (currentlyViewing !== studentName) return; 
 
-            if (result.exists) {
-                memoryCache[studentName].images.push(result.url);
-                appendPage(result.url, studentName);
+            if (success) {
+                const latestImg = memoryCache[studentName].images[memoryCache[studentName].images.length - 1];
+                appendPage(latestImg, studentName);
                 if (totalPages === 1) hideLoader(); 
-                index++;
-            } else {
-                memoryCache[studentName].finished = true;
             }
         }
 
