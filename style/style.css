@@ -1,5 +1,5 @@
 /* Design System & Variables */
-/* 1. CHẾ ĐỘ SÁNG  */
+/* 1. CHẾ ĐỘ SÁNG (Màu giấy mộc, êm dịu, tôn ảnh) */
 :root {
     --primary-color: #6a829e;      /* Xanh Blue trầm - Thanh lịch */
     --secondary-color: #dcb38a;    /* Vàng Champagne nhẹ - Hoài niệm */
@@ -14,7 +14,7 @@
     --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* 2. CHẾ ĐỘ TỐI  */
+/* 2. CHẾ ĐỘ TỐI (Quyền lực, sâu thẳm, nổi bật ảnh rực rỡ) */
 [data-theme="dark"] {
     --primary-color: #8fa6c2;      /* Xanh Blue sáng hơn để nổi trên nền tối */
     --secondary-color: #e3c19d;    /* Vàng Champagne sáng hơn */
@@ -2268,4 +2268,228 @@ body {
         width: 75px; /* Kích thước to hơn bản gốc 1 chút nhưng KHÔNG BỊ KHỦNG BỐ, hoàn toàn dễ đóng menu */
         max-width: 100%;
     }
+}
+
+/* ================= THƯ VIỆN SÁCH & FLIPBOOK ================= */
+.book-library-section {
+    background-color: var(--bg-light);
+    position: relative;
+    padding: 100px 0;
+}
+
+/* Desk Layout */
+.desk-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: calc(20px * 1.618);
+    perspective: 1000px;
+}
+
+.book-spine {
+    position: relative;
+    height: 200px;
+    background: linear-gradient(135deg, var(--primary-color), #4a5d73);
+    border-radius: 4px 12px 12px 4px;
+    box-shadow: 
+        inset 4px 0 10px rgba(0,0,0,0.1),
+        inset -1px 0 2px rgba(255,255,255,0.3),
+        5px 15px 25px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    transform-style: preserve-3d;
+    transform: rotateY(-10deg) translateZ(0);
+}
+
+.book-spine::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: rgba(255,255,255,0.2);
+}
+
+.book-spine:hover {
+    transform: rotateY(0deg) translateY(-15px) translateZ(30px);
+    box-shadow: 0 25px 40px rgba(0,0,0,0.3);
+}
+
+.book-spine span {
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Flipbook Modal Scene */
+.flipbook-modal-container {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px);
+}
+
+.close-flipbook {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 9999;
+    transition: transform 0.3s;
+}
+
+.close-flipbook:hover { transform: rotate(90deg) scale(1.2); }
+
+.flipbook-scene {
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 2500px;
+}
+
+.flipbook-wrapper {
+    position: relative;
+    width: 400px; /* Base width per page */
+    height: 550px;
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease;
+}
+
+/* Kế hoạch hóa Responsive Sách */
+@media screen and (max-width: 850px) {
+    .flipbook-wrapper { width: 300px; height: 420px; }
+}
+@media screen and (max-width: 480px) {
+    .flipbook-wrapper { width: 280px; height: 400px; }
+}
+
+/* Cấu trúc vật lý của trang sách */
+.fb-page {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+    cursor: pointer;
+}
+
+.fb-front, .fb-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px;
+    background: #fdfbf7 !important; /* THEME ISOLATION: Giấy luôn sáng */
+    border: 1px solid #e0dcd3;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.02);
+}
+
+.fb-back {
+    transform: rotateY(180deg);
+}
+
+.fb-page.flipped {
+    transform: rotateY(-180deg);
+}
+
+/* Đổ bóng gáy sách */
+.fb-front::before {
+    content: '';
+    position: absolute;
+    top:0; bottom:0; left:0; width:30px;
+    background: linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
+}
+.fb-back::after {
+    content: '';
+    position: absolute;
+    top:0; bottom:0; right:0; width:30px;
+    background: linear-gradient(to left, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 100%);
+}
+
+/* Nội dung trang sách */
+.fb-img-container {
+    width: 100%;
+    height: 65%;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 8px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    background: #eaeaea; /* Fallback placeholder */
+}
+
+.fb-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.fb-quote {
+    font-family: 'Dancing Script', cursive !important;
+    font-size: 1.4rem;
+    color: #2c3e50 !important; /* THEME ISOLATION: Mực luôn đậm */
+    text-align: center;
+    margin-top: 25px;
+    line-height: 1.4;
+    padding: 0 10px;
+}
+
+.fb-cover {
+    background: var(--primary-color) !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.fb-cover h2 {
+    font-family: 'Pacifico', cursive;
+    color: #fff !important;
+    font-size: 2.5rem;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.fb-loading {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 1.2rem;
+    font-family: 'Inter', sans-serif;
+    display: none;
+}
+
+/* ==================== VÁ LỖI LIỆT NÚT BẤM (ANTI-CLICK SHIELD) ==================== */
+.flipbook-modal-container {
+    display: none; /* Bắt buộc phải ẩn khi mới vào web để không chặn click */
+    position: fixed;
+    inset: 0; /* Phủ kín màn hình */
+    width: 100%;
+    height: 100%;
+    z-index: 9990; /* Phải thấp hơn Gatekeeper (9999) để không nhốt người dùng */
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+}
+
+.timeline-overlay {
+    pointer-events: none; /* Kỹ thuật cho phép thao tác chuột đâm xuyên qua lớp phủ đen */
 }
