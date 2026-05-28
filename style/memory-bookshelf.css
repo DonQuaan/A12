@@ -251,3 +251,217 @@
     .polaroid { width: 100%; height: 80%; transform: rotate(0); padding: 6px 6px 30px 6px; }
     .quote-page { padding: 20px; font-size: 1.4rem; }
 }
+
+:root {
+    --book-paper: #fdfbf7;
+    --book-text-color: #2c3e50;
+    --book-shadow-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+    --book-paper: #2a2d34;
+    --book-text-color: #e2e8f0;
+    --book-shadow-color: rgba(0, 0, 0, 0.7);
+}
+
+.bookshelf-section {
+    padding: clamp(60px, 8vw, 100px) 0;
+    position: relative;
+    z-index: 5;
+    overflow-x: hidden; /* Chặn thanh cuộn ngang khi Label thò ra */
+}
+
+.bookshelf-wrapper {
+    position: relative;
+    padding: 20px 20px 40px 20px; 
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    transition: filter 0.4s ease;
+}
+
+/* Hiệu ứng làm mờ nền (Depth of Field) */
+.bookshelf-wrapper:has(.book-spine:hover) .book-spine:not(:hover),
+.bookshelf-wrapper:has(.book-spine:hover) .decor-plant,
+.bookshelf-wrapper:has(.book-stack:hover) .book-stack:not(:hover),
+.bookshelf-wrapper:has(.book-stack:hover) .book-spine:not(:hover) {
+    filter: blur(3px) brightness(0.6);
+    opacity: 0.7;
+}
+
+#bookshelfGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 60px; /* Tách biệt rõ 3 tầng */
+}
+
+.shelf-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.shelf-board-row {
+    position: absolute;
+    bottom: 0;
+    left: 2%;
+    width: 96%;
+    height: 15px;
+    background: linear-gradient(to bottom, #dcb38a, #8e6538);
+    border-radius: 5px;
+    box-shadow: 0 15px 20px rgba(0,0,0,0.3), inset 0 2px 2px rgba(255,255,255,0.2);
+    z-index: 1;
+}
+
+.decor-plant {
+    width: 45px;
+    height: 70px;
+    background: url('https://i.postimg.cc/85z1X5J4/plant-png.png') no-repeat bottom center;
+    background-size: contain;
+    position: relative;
+    z-index: 2;
+    margin: 0 10px;
+    transition: filter 0.4s ease;
+    pointer-events: none;
+}
+
+/* ================= POSTURES (DÁNG SÁCH ĐƯỢC FIX CỨNG) ================= */
+.book-spine {
+    width: clamp(35px, 4vw, 42px);
+    height: clamp(140px, 15vw, 170px);
+    border-radius: 3px 6px 6px 3px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: inset 4px 0 10px rgba(0,0,0,0.1), 3px 5px 10px rgba(0,0,0,0.4);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.27), filter 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    will-change: transform, filter;
+    transform-origin: bottom center;
+}
+
+.posture-upright { transform: rotate(0deg); }
+.posture-lean-left { transform: rotate(-8deg); margin-left: -5px; }
+.posture-lean-right { transform: rotate(10deg); margin-right: -5px;}
+
+.book-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    z-index: 3;
+}
+.book-stack .book-spine {
+    width: clamp(130px, 14vw, 160px);
+    height: clamp(25px, 3vw, 32px);
+    border-radius: 2px 4px 4px 2px;
+    transform-origin: center center;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+    margin-bottom: -1px;
+}
+.book-stack .book-spine .spine-text {
+    writing-mode: horizontal-tb;
+    transform: rotate(0);
+    letter-spacing: 0.5px;
+    font-size: 0.75rem;
+}
+
+.book-spine:hover {
+    transform: translateY(-25px) scale(1.08) !important;
+    box-shadow: 0 20px 30px rgba(0,0,0,0.5), inset 4px 0 10px rgba(255,255,255,0.2);
+    z-index: 100;
+}
+
+/* ================= LABEL TÊN BÊN HÔNG ================= */
+.spine-hover-label {
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%) translateX(10px);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    margin-left: 10px;
+    z-index: 200;
+}
+
+/* Mũi tên chỉ ngược về cuốn sách */
+.spine-hover-label::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    border-width: 5px 10px 5px 0;
+    border-style: solid;
+    border-color: transparent rgba(0, 0, 0, 0.85) transparent transparent;
+}
+
+.book-spine:hover .spine-hover-label {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+}
+
+.spine-text {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.95);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* 10 Bìa sách tĩnh */
+.style-1 { background: #5a1811; border-left: 3px solid #8e2b22; box-shadow: inset 5px 0 10px rgba(0,0,0,0.4); }
+.style-2 { background: #1a2530; background-image: repeating-linear-gradient(0deg, transparent, transparent 20px, #d4af37 20px, #d4af37 23px); color: #d4af37;}
+.style-3 { background: #c2b29f; border-left: 2px solid #a3917d; color: #3e3226; text-shadow: none;}
+.style-4 { background: #0e4f3a; border-left: 4px solid #167a5a; }
+.style-5 { background: #371b4a; background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 2px, transparent 2px, transparent 4px); }
+.style-6 { background: #3a4047; border-left: 2px solid #555e68; }
+.style-7 { background: #6b4423; box-shadow: inset 8px 0 15px rgba(0,0,0,0.5); }
+.style-8 { background: #a56a65; border-left: 3px solid #d49a89; }
+.style-9 { background: #125c61; border-right: 2px solid #23a0a8; }
+.style-10 { background: #111; color: #e0e0e0; background-image: repeating-linear-gradient(0deg, transparent, transparent 40px, #aaa 40px, #aaa 42px);}
+
+.style-2 .spine-text, .style-3 .spine-text, .style-10 .spine-text { text-shadow: none; }
+
+/* ================= MODAL & SPINNER ================= */
+.book-modal {
+    display: none !important; 
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
+    z-index: 10000;
+}
+.book-modal.modal-active { display: flex !important; }
+.book-modal-content {
+    position: relative; width: 100%; height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.close-book {
+    position: absolute; top: 30px; right: 40px; font-size: 2.5rem; color: white; cursor: pointer; z-index: 10100; transition: transform 0.3s ease;
+}
+.close-book:hover { transform: rotate(90deg); }
+.scene { width: min(900px, 90vw); height: min(600px, 70vh); perspective: 1500px; display: flex; justify-content: center; align-items: center; }
+.book { width: 50%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s cubic
