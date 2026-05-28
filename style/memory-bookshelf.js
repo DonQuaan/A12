@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // HARD-CODE THỦ CÔNG 100%: Bản thiết kế tĩnh cho 3 tầng kệ.
-    // Đảm bảo không bao giờ có sự sai lệch vị trí, không random.
+    // BLUEPRINT TĨNH - ĐÃ XÓA SẠCH CHẬU CÂY TRANG TRÍ (PLANT)
     const libraryBlueprint = [
         // --- TẦNG 1 (9 Học Sinh) ---
         [
@@ -11,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 { name: "Bảo Nam", style: 3 },
                 { name: "Bảo Ngân", style: 4 }
             ]},
-            { type: "plant" },
             { type: "book", name: "Bảo Uyên", style: 5, post: "upright" },
             { type: "book", name: "Chí Thành", style: 6, post: "lean-right" },
             { type: "book", name: "Cát Hồng", style: 7, post: "upright" },
@@ -25,7 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
         [
             { type: "book", name: "Hoàng Cung", style: 5, post: "upright" },
             { type: "book", name: "Huỳnh Quỳnh", style: 1, post: "lean-right" },
-            { type: "plant" },
             { type: "book", name: "Khánh Châu", style: 2, post: "upright" },
             { type: "stack", items: [
                 { name: "Khánh Huyền", style: 3 },
@@ -44,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ]},
             { type: "book", name: "Song Thư", style: 2, post: "lean-left" },
             { type: "book", name: "Thành Nhân", style: 3, post: "upright" },
-            { type: "plant" },
             { type: "book", name: "Thảo Nguyên", style: 4, post: "upright" },
             { type: "book", name: "Tường An", style: 5, post: "lean-right" },
             { type: "book", name: "Xuân Trọng", style: 6, post: "upright" }
@@ -66,9 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // SMART MEMORY CACHE
     const memoryCache = {}; 
-    let currentlyViewing = null; // Trạm kiểm duyệt DOM Guard
+    let currentlyViewing = null; 
 
-    // Khởi tạo Cache rỗng
     libraryBlueprint.forEach(row => {
         row.forEach(item => {
             if (item.type === "book") memoryCache[item.name] = { images: [], finished: false };
@@ -87,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return spine;
     }
 
-    // --- RENDER THỦ CÔNG THEO BLUEPRINT ---
     if (bookshelfGrid) {
         bookshelfGrid.innerHTML = ''; 
         
@@ -103,10 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     stack.className = "book-stack";
                     item.items.forEach(b => stack.appendChild(createBookElement(b.name, b.style, 'horizontal')));
                     shelfRow.appendChild(stack);
-                } else if (item.type === "plant") {
-                    const plant = document.createElement("div");
-                    plant.className = "decor-plant";
-                    shelfRow.appendChild(plant);
                 }
             });
 
@@ -120,7 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(startGlobalPreload, 3000); 
     }
 
-    // --- ĐỘNG CƠ TẢI NỀN (THROTTLED BACKGROUND FETCH) ---
     function checkImageExistence(url) {
         return new Promise((resolve) => {
             const img = new Image();
@@ -135,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let name of studentNames) {
             let index = 1;
             while (!memoryCache[name].finished) {
-                if (currentlyViewing !== null && currentlyViewing !== name) break; // Nhường đường nếu user đang xem sách khác
+                if (currentlyViewing !== null && currentlyViewing !== name) break; 
                 
                 const url = `style/img/Bookmember/${name}/Anh (${index}).webp`;
                 const result = await checkImageExistence(url);
@@ -150,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // --- LOGIC MỞ SÁCH (CÓ DOM GUARD) ---
     async function openBook(studentName) {
         currentlyViewing = studentName; 
         
@@ -165,7 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
         currentPage = 0;
         totalPages = 0;
 
-        // Nếu trong Cache đã có sẵn ít nhất 1 ảnh (nhờ tải nền), render ngay lập tức
         if (memoryCache[studentName].images.length > 0) {
             memoryCache[studentName].images.forEach(imgUrl => {
                 appendPage(imgUrl, studentName);
@@ -173,19 +160,17 @@ document.addEventListener("DOMContentLoaded", () => {
             hideLoader();
         }
 
-        // Tăng tốc ép xung tải tiếp nếu chưa finished
         let index = memoryCache[studentName].images.length + 1;
         while (!memoryCache[studentName].finished) {
             const url = `style/img/Bookmember/${studentName}/Anh (${index}).webp`;
             const result = await checkImageExistence(url);
             
-            // DOM GUARD: Trạm kiểm duyệt chặn nạp nhầm ảnh
             if (currentlyViewing !== studentName) return; 
 
             if (result.exists) {
                 memoryCache[studentName].images.push(result.url);
                 appendPage(result.url, studentName);
-                if (totalPages === 1) hideLoader(); // Ẩn loader ngay khi có ảnh đầu tiên
+                if (totalPages === 1) hideLoader(); 
                 index++;
             } else {
                 memoryCache[studentName].finished = true;
@@ -204,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
         bookControls.style.display = "flex";
     }
 
-    // Hàm đắp trang an toàn tuyệt đối
     function appendPage(imgSrc, studentName) {
         if (currentlyViewing !== studentName) return; 
 
@@ -235,7 +219,6 @@ document.addEventListener("DOMContentLoaded", () => {
             else flipPage(1);
         });
 
-        // Tính toán tọa độ lớp Z động
         pagesDOM.forEach((p, idx) => {
             if (!p.classList.contains("page-flipped")) {
                 p.style.zIndex = totalPages - idx;
@@ -272,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("bookPrev")?.addEventListener("click", () => flipPage(-1));
     
     closeBookBtn?.addEventListener("click", () => {
-        currentlyViewing = null; // Cắt đứt cầu nối, chặn mọi ảnh đang tải dở xâm nhập DOM
+        currentlyViewing = null; 
         bookModal.classList.remove("modal-active");
         document.body.style.overflow = "auto";
         flipbookWrapper.innerHTML = ''; 
