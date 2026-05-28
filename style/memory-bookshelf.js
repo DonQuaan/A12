@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // BLUEPRINT TĨNH - ĐÃ TÁCH BIỆT TÊN HIỂN THỊ VÀ TÊN THƯ MỤC
+    // BLUEPRINT TĨNH
     const libraryBlueprint = [
-        // --- TẦNG 1 (9 Học Sinh) ---
         [
-            // Đã cập nhật folder vật lý cho Đông Quân thành DonQuaan
             { type: "book", name: "Đông Quân", folder: "DonQuaan", style: 1, post: "upright" },
             { type: "book", name: "Bình Minh", style: 2, post: "lean-left" },
             { type: "stack", items: [
@@ -20,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
             ]},
             { type: "book", name: "Hoàng Anh", style: 10, post: "lean-left" }
         ],
-        // --- TẦNG 2 (9 Học Sinh) ---
         [
             { type: "book", name: "Hoàng Cung", style: 5, post: "upright" },
             { type: "book", name: "Huỳnh Quỳnh", style: 1, post: "lean-right" },
@@ -34,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
             { type: "book", name: "Nhật Hoàn", style: 8, post: "lean-right" },
             { type: "book", name: "Nhật Quang", style: 9, post: "upright" }
         ],
-        // --- TẦNG 3 (8 Học Sinh) ---
         [
             { type: "stack", items: [
                 { name: "Phương Linh", style: 10 },
@@ -64,7 +60,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const memoryCache = {}; 
     let currentlyViewing = null; 
 
-    // Ánh xạ Cache: Lấy trường `folder` nếu có, nếu không thì lấy mặc định là `name`
+    // FALLBACK QUOTE (Chống sập giao diện nếu Quote.txt chưa kịp tải hoặc lỗi)
+    let quoteList = [
+        "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."
+    ];
+
+    // ENGINE FETCH FILE QUOTE.TXT
+    async function loadQuotesFromFile() {
+        try {
+            const response = await fetch('style/Quote.txt');
+            if (!response.ok) return; // Bỏ qua nếu không tìm thấy file
+            
+            const text = await response.text();
+            // Regex hỗ trợ bắt mọi loại ngoặc kép (" ", “ ”) và lọc các dòng trống
+            const parsedQuotes = [];
+            const lines = text.split(/\r?\n/);
+            
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                const match = trimmed.match(/^-\s*["“”](.*)["“”]$/);
+                if (match && match[1]) {
+                    parsedQuotes.push(match[1]);
+                }
+            });
+
+            if (parsedQuotes.length > 0) {
+                quoteList = parsedQuotes; // Đè mảng mặc định bằng dữ liệu từ File
+            }
+        } catch (error) {
+            console.warn("Chưa tải được Quote.txt, sử dụng Quote mặc định.");
+        }
+    }
+
+    // Hàm random trích dẫn
+    function getRandomQuote() {
+        const randomIndex = Math.floor(Math.random() * quoteList.length);
+        return quoteList[randomIndex];
+    }
+
     libraryBlueprint.forEach(row => {
         row.forEach(item => {
             if (item.type === "book") {
@@ -89,8 +122,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return spine;
     }
 
+    // KHỞI TẠO ĐỒNG THỜI KỆ SÁCH & TẢI QUOTE
     if (bookshelfGrid) {
         bookshelfGrid.innerHTML = ''; 
+        loadQuotesFromFile(); // Kích hoạt Fetch txt ngay lập tức
         
         libraryBlueprint.forEach(row => {
             const shelfRow = document.createElement("div");
@@ -110,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const board = document.createElement("div");
             board.className = "shelf-board-row";
             shelfRow.appendChild(board);
-            
             bookshelfGrid.appendChild(shelfRow);
         });
 
@@ -126,13 +160,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // AUTO-HEAL ENGINE (Đã cập nhật cơ chế đọc `folder`)
     async function fetchNextImage(name) {
         const cache = memoryCache[name];
         if (cache.finished) return false;
         
         const index = cache.images.length + 1;
-        const targetFolder = cache.folder; // Dùng tên thư mục thực tế
+        const targetFolder = cache.folder; 
         
         if (index === 1) {
             const patterns = [
@@ -200,7 +233,6 @@ document.addEventListener("DOMContentLoaded", () => {
         while (!memoryCache[studentName].finished) {
             const success = await fetchNextImage(studentName);
             
-            // DOM GUARD
             if (currentlyViewing !== studentName) return; 
 
             if (success) {
@@ -231,6 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const page = document.createElement("div");
         page.className = "book-page";
         
+        // Random 1 câu Quote từ mảng đã load
+        const randomQuote = getRandomQuote();
+        
         page.innerHTML = `
             <div class="page-front">
                 <div class="page-content">
@@ -241,7 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             <div class="page-back">
                 <div class="page-content quote-page">
-                    <p>"Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."</p>
+                    <p>"${randomQuote}"</p>
                     <span style="display:block; margin-top:20px; font-size:1.2rem; font-family:'Inter', sans-serif;">- ${studentName} -</span>
                 </div>
             </div>
