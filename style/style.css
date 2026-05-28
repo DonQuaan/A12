@@ -2475,3 +2475,21 @@ body {
     font-family: 'Inter', sans-serif;
     display: none;
 }
+
+/* ==================== VÁ LỖI LIỆT NÚT BẤM (ANTI-CLICK SHIELD) ==================== */
+.flipbook-modal-container {
+    display: none; /* Bắt buộc phải ẩn khi mới vào web để không chặn click */
+    position: fixed;
+    inset: 0; /* Phủ kín màn hình */
+    width: 100%;
+    height: 100%;
+    z-index: 9990; /* Phải thấp hơn Gatekeeper (9999) để không nhốt người dùng */
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(10px);
+    justify-content: center;
+    align-items: center;
+}
+
+.timeline-overlay {
+    pointer-events: none; /* Kỹ thuật cho phép thao tác chuột đâm xuyên qua lớp phủ đen */
+}
