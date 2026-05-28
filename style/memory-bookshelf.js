@@ -56,15 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 0;
     let totalPages = 0;
     let pagesDOM = [];
-    
-    const memoryCache = {}; 
     let currentlyViewing = null; 
+    const memoryCache = {}; 
 
     let quoteList = [
         "Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."
     ];
 
-    // ENGINE FETCH FILE QUOTE.TXT
     async function loadQuotesFromFile() {
         try {
             const response = await fetch('style/Quote.txt');
@@ -75,11 +73,10 @@ document.addEventListener("DOMContentLoaded", () => {
             const lines = text.split(/\r?\n/);
             
             lines.forEach(line => {
-                // REGEX MỚI: Bắt lõi. Bất kể dấu đứng trước là gì, chỉ cần nằm trong ngoặc kép là thu thập
                 const match = line.match(/["“”]([^"“”]+)["“”]/);
                 if (match && match[1]) {
                     const quoteText = match[1].trim();
-                    if (quoteText.length > 0) { // Chặn chuỗi rỗng
+                    if (quoteText.length > 0) {
                         parsedQuotes.push(quoteText);
                     }
                 }
@@ -168,11 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         if (index === 1) {
             const patterns = [
-                "Anh ($).webp",
-                "Anh($).webp",
-                "Anh ($).jpg",
-                "anh ($).webp",
-                "Anh ($).png"
+                "Anh ($).webp", "Anh($).webp", "Anh ($).jpg", "anh ($).webp", "Anh ($).png"
             ];
             for (let p of patterns) {
                 const url = `style/img/Bookmember/${targetFolder}/${p.replace('$', index)}`;
@@ -264,11 +257,16 @@ document.addEventListener("DOMContentLoaded", () => {
         
         const randomQuote = getRandomQuote();
         
+        // Nhúng thêm khối .mobile-quote-box vào mặt trước (Sẽ ẩn đi trên PC)
         page.innerHTML = `
             <div class="page-front">
                 <div class="page-content">
                     <div class="polaroid">
                         <img src="${imgSrc}" loading="lazy" alt="${studentName}">
+                    </div>
+                    <div class="mobile-quote-box">
+                        <p>"${randomQuote}"</p>
+                        <span>- ${studentName} -</span>
                     </div>
                 </div>
             </div>
