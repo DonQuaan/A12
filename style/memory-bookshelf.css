@@ -218,13 +218,47 @@
 }
 @keyframes customSpin { 100% { transform: rotate(360deg); } }
 
+/* ================= TỐI ƯU HÓA MOBILE (HIỂN THỊ QUOTE & CHỐNG TRÀN) ================= */
 @media screen and (max-width: 768px) {
     .shelf-row { gap: 8px; padding-bottom: 12px; }
     .book-spine { width: 32px; height: 130px; }
     .book-stack .book-spine { width: 110px; height: 25px; }
+    
     .scene { width: 95vw; perspective: 2500px; }
     .book { width: 100%; }
-    .page-back { display: none; }
-    .polaroid { width: 100%; height: 80%; transform: rotate(0); padding: 6px 6px 30px 6px; }
-    .quote-page { padding: 20px; font-size: 1.4rem; }
+    
+    /* GỠ BỎ LỆNH ẨN MẶT SAU. HIỂN THỊ QUOTE TRỞ LẠI */
+    .page-back { display: block; } 
+    
+    .polaroid { 
+        width: 100%; 
+        height: 75%; 
+        transform: rotate(0); 
+        padding: 8px 8px 30px 8px; 
+    }
+    
+    /* Tối ưu hiển thị Quote cho màn hình hẹp */
+    .quote-page { 
+        padding: 20px 15px; 
+        font-size: 1.1rem; 
+        line-height: 28px; /* Ép line-height cố định */
+        background: repeating-linear-gradient(transparent, transparent 27px, rgba(116, 139, 167, 0.15) 27px, rgba(116, 139, 167, 0.15) 28px);
+        background-position: 0 16px; /* Căn chỉnh dòng kẻ khớp với chữ trên mobile */
+    }
+
+    /* Thu nhỏ tên học sinh ở mặt Quote trên mobile */
+    .quote-page span {
+        font-size: 0.95rem !important;
+        margin-top: 15px !important;
+    }
+
+    /* Thu nhỏ nút bấm điều hướng để không đè vào sách */
+    .book-controls {
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .book-nav-btn {
+        width: 40px;
+        height: 40px;
+    }
 }
