@@ -1,12 +1,54 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    const folderNames = [
-        "Đông Quân", "Bình Minh", "Bảo Nam", "Bảo Ngân", "Bảo Uyên", 
-        "Chí Thành", "Cát Hồng", "Gia Bảo", "Gia Huy", "Hoàng Anh", 
-        "Hoàng Cung", "Huỳnh Quỳnh", "Khánh Châu", "Khánh Huyền", 
-        "Khải Hoàn", "Minh Anh", "Minh Khôi", "Nhật Hoàn", "Nhật Quang", 
-        "Phương Linh", "Quang Chánh", "Song Thư", "Thành Nhân", 
-        "Thảo Nguyên", "Tường An", "Xuân Trọng"
+    // HARD-CODE THỦ CÔNG 100%: Bản thiết kế tĩnh cho 3 tầng kệ.
+    // Đảm bảo không bao giờ có sự sai lệch vị trí, không random.
+    const libraryBlueprint = [
+        // --- TẦNG 1 (9 Học Sinh) ---
+        [
+            { type: "book", name: "Đông Quân", style: 1, post: "upright" },
+            { type: "book", name: "Bình Minh", style: 2, post: "lean-left" },
+            { type: "stack", items: [
+                { name: "Bảo Nam", style: 3 },
+                { name: "Bảo Ngân", style: 4 }
+            ]},
+            { type: "plant" },
+            { type: "book", name: "Bảo Uyên", style: 5, post: "upright" },
+            { type: "book", name: "Chí Thành", style: 6, post: "lean-right" },
+            { type: "book", name: "Cát Hồng", style: 7, post: "upright" },
+            { type: "stack", items: [
+                { name: "Gia Bảo", style: 8 },
+                { name: "Gia Huy", style: 9 }
+            ]},
+            { type: "book", name: "Hoàng Anh", style: 10, post: "lean-left" }
+        ],
+        // --- TẦNG 2 (9 Học Sinh) ---
+        [
+            { type: "book", name: "Hoàng Cung", style: 5, post: "upright" },
+            { type: "book", name: "Huỳnh Quỳnh", style: 1, post: "lean-right" },
+            { type: "plant" },
+            { type: "book", name: "Khánh Châu", style: 2, post: "upright" },
+            { type: "stack", items: [
+                { name: "Khánh Huyền", style: 3 },
+                { name: "Khải Hoàn", style: 4 }
+            ]},
+            { type: "book", name: "Minh Anh", style: 6, post: "lean-left" },
+            { type: "book", name: "Minh Khôi", style: 7, post: "upright" },
+            { type: "book", name: "Nhật Hoàn", style: 8, post: "lean-right" },
+            { type: "book", name: "Nhật Quang", style: 9, post: "upright" }
+        ],
+        // --- TẦNG 3 (8 Học Sinh) ---
+        [
+            { type: "stack", items: [
+                { name: "Phương Linh", style: 10 },
+                { name: "Quang Chánh", style: 1 }
+            ]},
+            { type: "book", name: "Song Thư", style: 2, post: "lean-left" },
+            { type: "book", name: "Thành Nhân", style: 3, post: "upright" },
+            { type: "plant" },
+            { type: "book", name: "Thảo Nguyên", style: 4, post: "upright" },
+            { type: "book", name: "Tường An", style: 5, post: "lean-right" },
+            { type: "book", name: "Xuân Trọng", style: 6, post: "upright" }
+        ]
     ];
 
     const bookshelfGrid = document.getElementById("bookshelfGrid");
@@ -22,19 +64,18 @@ document.addEventListener("DOMContentLoaded", () => {
     let totalPages = 0;
     let pagesDOM = [];
     
-    // --- SMART PRELOAD QUEUE (Chống liệt nút) ---
-    const imageCache = {}; // Lưu trữ URL ảnh đã dò được: { "Đông Quân": ["url1", "url2"] }
-    const isFinished = {}; // Đánh dấu thư mục đã tải hết (gặp 404): { "Đông Quân": true }
-    let backgroundQueue = [...folderNames]; // Hàng đợi tải nền
-    let priorityStudent = null; // Cờ kích hoạt ưu tiên ép xung tải
-    
-    // Khởi tạo Dictionary Cache
-    folderNames.forEach(name => {
-        imageCache[name] = [];
-        isFinished[name] = false;
+    // SMART MEMORY CACHE
+    const memoryCache = {}; 
+    let currentlyViewing = null; // Trạm kiểm duyệt DOM Guard
+
+    // Khởi tạo Cache rỗng
+    libraryBlueprint.forEach(row => {
+        row.forEach(item => {
+            if (item.type === "book") memoryCache[item.name] = { images: [], finished: false };
+            if (item.type === "stack") item.items.forEach(b => memoryCache[b.name] = { images: [], finished: false });
+        });
     });
 
-    // Hàm tạo 1 Element sách
     function createBookElement(name, styleNum, posture) {
         const spine = document.createElement("div");
         spine.className = `book-spine style-${styleNum} posture-${posture}`;
@@ -46,52 +87,28 @@ document.addEventListener("DOMContentLoaded", () => {
         return spine;
     }
 
-    // --- RENDER 3 TẦNG KỆ THỰC TẾ ---
+    // --- RENDER THỦ CÔNG THEO BLUEPRINT ---
     if (bookshelfGrid) {
         bookshelfGrid.innerHTML = ''; 
-        // Trộn ngẫu nhiên 26 người
-        const shuffled = [...folderNames].sort(() => 0.5 - Math.random());
         
-        // Chia 3 tầng (9, 9, 8)
-        const shelves = [ shuffled.slice(0, 9), shuffled.slice(9, 18), shuffled.slice(18, 26) ];
-        
-        const postures = ['upright', 'upright', 'upright', 'lean-left', 'lean-right'];
-
-        shelves.forEach((shelfStudents, shelfIndex) => {
+        libraryBlueprint.forEach(row => {
             const shelfRow = document.createElement("div");
             shelfRow.className = "shelf-row";
 
-            let i = 0;
-            while (i < shelfStudents.length) {
-                // Tỉ lệ 15% tạo một cụm sách nằm ngang (Stack 2 cuốn)
-                if (Math.random() < 0.15 && i < shelfStudents.length - 1) {
+            row.forEach(item => {
+                if (item.type === "book") {
+                    shelfRow.appendChild(createBookElement(item.name, item.style, item.post));
+                } else if (item.type === "stack") {
                     const stack = document.createElement("div");
                     stack.className = "book-stack";
-                    
-                    const name1 = shelfStudents[i];
-                    const name2 = shelfStudents[i+1];
-                    const s1 = Math.floor(Math.random() * 10) + 1;
-                    const s2 = Math.floor(Math.random() * 10) + 1;
-                    
-                    stack.appendChild(createBookElement(name1, s1, 'horizontal'));
-                    stack.appendChild(createBookElement(name2, s2, 'horizontal'));
+                    item.items.forEach(b => stack.appendChild(createBookElement(b.name, b.style, 'horizontal')));
                     shelfRow.appendChild(stack);
-                    i += 2;
-                } else {
-                    const name = shelfStudents[i];
-                    const style = Math.floor(Math.random() * 10) + 1;
-                    const post = postures[Math.floor(Math.random() * postures.length)];
-                    shelfRow.appendChild(createBookElement(name, style, post));
-                    i++;
-                }
-
-                // Random chèn chậu cây trang trí
-                if (Math.random() < 0.25) {
+                } else if (item.type === "plant") {
                     const plant = document.createElement("div");
                     plant.className = "decor-plant";
                     shelfRow.appendChild(plant);
                 }
-            }
+            });
 
             const board = document.createElement("div");
             board.className = "shelf-board-row";
@@ -100,11 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
             bookshelfGrid.appendChild(shelfRow);
         });
 
-        // Bắt đầu chạy tiến trình tải ngầm cực nhẹ
-        setTimeout(processBackgroundQueue, 2000); 
+        setTimeout(startGlobalPreload, 3000); 
     }
 
-    // --- ENGINE XỬ LÝ ẢNH (Không gây treo máy) ---
+    // --- ĐỘNG CƠ TẢI NỀN (THROTTLED BACKGROUND FETCH) ---
     function checkImageExistence(url) {
         return new Promise((resolve) => {
             const img = new Image();
@@ -114,109 +130,121 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    async function processBackgroundQueue() {
-        if (backgroundQueue.length === 0) return; // Đã quét xong cả lớp
-
-        // Nếu có ai đó click vào sách, DỪNG QUÉT NỀN để nhường 100% băng thông cho cuốn đó
-        if (priorityStudent) {
-            setTimeout(processBackgroundQueue, 500);
-            return; 
+    async function startGlobalPreload() {
+        const studentNames = Object.keys(memoryCache);
+        for (let name of studentNames) {
+            let index = 1;
+            while (!memoryCache[name].finished) {
+                if (currentlyViewing !== null && currentlyViewing !== name) break; // Nhường đường nếu user đang xem sách khác
+                
+                const url = `style/img/Bookmember/${name}/Anh (${index}).webp`;
+                const result = await checkImageExistence(url);
+                
+                if (result.exists) {
+                    memoryCache[name].images.push(result.url);
+                    index++;
+                } else {
+                    memoryCache[name].finished = true;
+                }
+            }
         }
-
-        const student = backgroundQueue[0];
-        const nextIndex = imageCache[student].length + 1;
-        const url = `style/img/Bookmember/${student}/Anh (${nextIndex}).webp`;
-
-        const result = await checkImageExistence(url);
-        
-        if (result.exists) {
-            imageCache[student].push(result.url); // Lưu vào cache
-            // Vẫn quét tiếp người này ở vòng lặp sau
-        } else {
-            isFinished[student] = true; // Hết ảnh
-            backgroundQueue.shift(); // Xóa người này khỏi Queue
-        }
-
-        // Đợi 200ms cho mượt rồi lặp lại
-        setTimeout(processBackgroundQueue, 200); 
     }
 
-    // --- LOGIC MỞ SÁCH ---
-    async function openBook(folderName) {
+    // --- LOGIC MỞ SÁCH (CÓ DOM GUARD) ---
+    async function openBook(studentName) {
+        currentlyViewing = studentName; 
+        
         bookModal.classList.add("modal-active");
         bookScene.style.display = "none";
         bookControls.style.display = "none";
         bookLoader.style.display = "block";
         document.body.style.overflow = "hidden";
 
-        // Kích hoạt cờ ưu tiên. Chặn mọi tiến trình ngầm khác.
-        priorityStudent = folderName;
-        
-        // Quét tốc độ cao cho đến khi báo Finished
-        let index = imageCache[folderName].length + 1;
-        while (!isFinished[folderName]) {
-            const url = `style/img/Bookmember/${folderName}/Anh (${index}).webp`;
+        flipbookWrapper.innerHTML = ''; 
+        pagesDOM = [];
+        currentPage = 0;
+        totalPages = 0;
+
+        // Nếu trong Cache đã có sẵn ít nhất 1 ảnh (nhờ tải nền), render ngay lập tức
+        if (memoryCache[studentName].images.length > 0) {
+            memoryCache[studentName].images.forEach(imgUrl => {
+                appendPage(imgUrl, studentName);
+            });
+            hideLoader();
+        }
+
+        // Tăng tốc ép xung tải tiếp nếu chưa finished
+        let index = memoryCache[studentName].images.length + 1;
+        while (!memoryCache[studentName].finished) {
+            const url = `style/img/Bookmember/${studentName}/Anh (${index}).webp`;
             const result = await checkImageExistence(url);
+            
+            // DOM GUARD: Trạm kiểm duyệt chặn nạp nhầm ảnh
+            if (currentlyViewing !== studentName) return; 
+
             if (result.exists) {
-                imageCache[folderName].push(result.url);
+                memoryCache[studentName].images.push(result.url);
+                appendPage(result.url, studentName);
+                if (totalPages === 1) hideLoader(); // Ẩn loader ngay khi có ảnh đầu tiên
                 index++;
             } else {
-                isFinished[folderName] = true;
+                memoryCache[studentName].finished = true;
             }
         }
 
-        // Sau khi đã ép xung tải xong, nhả cờ ưu tiên ra
-        priorityStudent = null;
+        if (totalPages === 0) {
+            appendPage('https://i.postimg.cc/P5nMWJnM/Logo.png', studentName);
+            hideLoader();
+        }
+    }
 
-        // Render toàn bộ ảnh từ Cache ra UI
-        buildFlipbookDOM(imageCache[folderName], folderName.trim());
-        
+    function hideLoader() {
         bookLoader.style.display = "none";
         bookScene.style.display = "flex";
         bookControls.style.display = "flex";
     }
 
-    function buildFlipbookDOM(images, studentName) {
-        flipbookWrapper.innerHTML = ''; 
-        pagesDOM = [];
-        currentPage = 0;
-        
-        if (images.length === 0) {
-            images = ['https://i.postimg.cc/P5nMWJnM/Logo.png']; 
-        }
+    // Hàm đắp trang an toàn tuyệt đối
+    function appendPage(imgSrc, studentName) {
+        if (currentlyViewing !== studentName) return; 
 
-        totalPages = images.length;
+        const index = totalPages;
+        totalPages++;
         
-        images.forEach((imgSrc, i) => {
-            const page = document.createElement("div");
-            page.className = "book-page";
-            page.style.zIndex = totalPages - i; 
-            
-            page.innerHTML = `
-                <div class="page-front">
-                    <div class="page-content">
-                        <div class="polaroid">
-                            <img src="${imgSrc}" loading="lazy" alt="${studentName}">
-                        </div>
+        const page = document.createElement("div");
+        page.className = "book-page";
+        
+        page.innerHTML = `
+            <div class="page-front">
+                <div class="page-content">
+                    <div class="polaroid">
+                        <img src="${imgSrc}" loading="lazy" alt="${studentName}">
                     </div>
                 </div>
-                <div class="page-back">
-                    <div class="page-content quote-page">
-                        <p>"Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."</p>
-                        <span style="display:block; margin-top:20px; font-size:1.2rem; font-family:'Inter', sans-serif;">- ${studentName} -</span>
-                    </div>
+            </div>
+            <div class="page-back">
+                <div class="page-content quote-page">
+                    <p>"Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."</p>
+                    <span style="display:block; margin-top:20px; font-size:1.2rem; font-family:'Inter', sans-serif;">- ${studentName} -</span>
                 </div>
-            `;
-            
-            page.addEventListener("click", () => {
-                if (page.classList.contains("page-flipped")) flipPage(-1);
-                else flipPage(1);
-            });
-
-            flipbookWrapper.appendChild(page);
-            pagesDOM.push(page);
+            </div>
+        `;
+        
+        page.addEventListener("click", () => {
+            if (page.classList.contains("page-flipped")) flipPage(-1);
+            else flipPage(1);
         });
 
+        // Tính toán tọa độ lớp Z động
+        pagesDOM.forEach((p, idx) => {
+            if (!p.classList.contains("page-flipped")) {
+                p.style.zIndex = totalPages - idx;
+            }
+        });
+        page.style.zIndex = totalPages - index;
+
+        flipbookWrapper.appendChild(page);
+        pagesDOM.push(page);
         updateBookUI();
     }
 
@@ -244,6 +272,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("bookPrev")?.addEventListener("click", () => flipPage(-1));
     
     closeBookBtn?.addEventListener("click", () => {
+        currentlyViewing = null; // Cắt đứt cầu nối, chặn mọi ảnh đang tải dở xâm nhập DOM
         bookModal.classList.remove("modal-active");
         document.body.style.overflow = "auto";
         flipbookWrapper.innerHTML = ''; 
