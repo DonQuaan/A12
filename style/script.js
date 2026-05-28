@@ -1188,43 +1188,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 150);
       }
   });
-  // ================= MEMORY BOOKSHELF (FLIPBOOK 3D) =================
-    try {
-        const bookshelfGrid = document.getElementById("bookshelfGrid");
-        const bookModal = document.getElementById("bookModal");
-        const closeBookBtn = document.querySelector(".close-book");
-        const flipbookWrapper = document.getElementById("flipbookWrapper");
-        const bookLoader = document.getElementById("bookLoader");
-        const bookScene = document.getElementById("bookScene");
-        const bookControls = document.getElementById("bookControls");
-        const pageIndicator = document.getElementById("pageIndicator");
-        
-        let currentPage = 0;
-        let totalPages = 0;
-        let pagesDOM = [];
-        let isBookLoading = false;
-
-        // Sinh mảng pastel ngẫu nhiên cho gáy sách
-        const getPastelColor = (index) => {
-            const hues = [210, 35, 10, 160, 280]; // Xanh blue, Cam, Đỏ gạch, Xanh ngọc, Tím nhạt
-            return `hsl(${hues[index % hues.length]}, 40%, 65%)`;
-        };
-
-        // Render 26 cuốn sách lên kệ
-        if (bookshelfGrid && members && members.length > 0) {
-            members.forEach((m, index) => {
-                const spine = document.createElement("div");
-                spine.className = "book-spine animate-up";
-                spine.style.animationDelay = `${index * 0.05}s`;
-                spine.style.backgroundColor = getPastelColor(index);
-                spine.innerHTML = `<span class="spine-text">${m.name}</span>`;
-                
-                spine.addEventListener("click", () => openBook(m.name, m.quote));
-                bookshelfGrid.appendChild(spine);
-            });
-        }
-
-        // --- Logic Tải và Mở Sách ---
+  // --- Logic Tải và Mở Sách (Đã sửa đường dẫn theo thư mục) ---
         async function openBook(studentName, quoteText) {
             if (isBookLoading) return;
             isBookLoading = true;
@@ -1235,9 +1199,9 @@ document.addEventListener("DOMContentLoaded", () => {
             bookLoader.style.display = "block";
             document.body.style.overflow = "hidden";
 
-            // Chuẩn hóa tên (Xóa dấu cách và ký tự đặc biệt nếu cần, tuỳ cấu trúc thư mục thật của bạn. 
-            // Ở đây giữ nguyên tên theo biến m.name)
+            // Lấy chính xác tên học sinh làm tên thư mục (Bảo toàn dấu cách và tiếng Việt)
             const folderName = studentName.trim(); 
+            // Đường dẫn gốc: style/img/Bookmember/Tên Học Sinh/
             const images = await probeImages(`style/img/Bookmember/${folderName}`);
 
             buildFlipbook(images, studentName, quoteText);
@@ -1248,13 +1212,14 @@ document.addEventListener("DOMContentLoaded", () => {
             isBookLoading = false;
         }
 
-        // Thuật toán dò ảnh mù (Image Probing)
+        // Thuật toán dò ảnh mù (Image Probing) - Đã cập nhật định dạng .webp
         async function probeImages(folderPath) {
             let validImages = [];
             let i = 1;
             while (true) {
                 try {
-                    let url = `${folderPath}/Anh (${i}).jpg`;
+                    // Cấu trúc bắt buộc: style/img/Bookmember/Tên Học Sinh/Anh (1).webp
+                    let url = `${folderPath}/Anh (${i}).webp`;
                     await new Promise((resolve, reject) => {
                         let img = new Image();
                         img.onload = () => { resolve(); img = null; };
@@ -1264,7 +1229,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     validImages.push(url);
                     i++;
                 } catch (e) {
-                    break; // Đã đến giới hạn (404)
+                    break; // Bắt được lỗi 404 (Không tìm thấy Anh (i).webp) -> Ngắt vòng lặp
                 }
             }
             return validImages;
@@ -1272,22 +1237,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Dựng cấu trúc DOM Flipbook (JIT)
         function buildFlipbook(images, studentName, quote) {
-            flipbookWrapper.innerHTML = ''; // Clear bộ nhớ rác
+            flipbookWrapper.innerHTML = ''; 
             pagesDOM = [];
             currentPage = 0;
             
+            // Xử lý ngoại lệ nếu thư mục rỗng (Chưa có ảnh .webp nào)
             if (images.length === 0) {
-                // Dummy page nếu không có ảnh
-                images = ['style/img/AnhTapThe/Anh (1).jpg']; 
+                // Tạo một trang báo lỗi nhẹ nhàng thay vì sập web
+                images = ['https://i.postimg.cc/P5nMWJnM/Logo.png']; // Thay bằng ảnh logo mờ hoặc placeholder tùy ý
+                quote = "Những ký ức này đang được thu thập và sẽ sớm hoàn thiện...";
             }
 
-            // Desktop hiển thị 2 mặt/trang -> Tổng tờ giấy = images.length
             totalPages = images.length;
             
             images.forEach((imgSrc, i) => {
                 const page = document.createElement("div");
                 page.className = "book-page";
-                page.style.zIndex = totalPages - i; // Chỉnh Z-index động
+                page.style.zIndex = totalPages - i; 
                 
                 page.innerHTML = `
                     <div class="page-front">
@@ -1305,7 +1271,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
                 
-                // Lật khi click thẳng vào trang sách
                 page.addEventListener("click", () => {
                     if (page.classList.contains("page-flipped")) flipPage(-1);
                     else flipPage(1);
@@ -1317,51 +1282,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
             updateBookUI();
         }
-
-        // Động cơ lật sách 3D
-        window.flipPage = function(direction) {
-            if (direction === 1 && currentPage < totalPages) {
-                pagesDOM[currentPage].classList.add("page-flipped");
-                // Đảo z-index khi lật qua trái để không đè hình
-                pagesDOM[currentPage].style.zIndex = currentPage + 1; 
-                currentPage++;
-            } else if (direction === -1 && currentPage > 0) {
-                currentPage--;
-                pagesDOM[currentPage].classList.remove("page-flipped");
-                // Phục hồi z-index khi lật về phải
-                pagesDOM[currentPage].style.zIndex = totalPages - currentPage;
-            }
-            updateBookUI();
-        }
-
-        function updateBookUI() {
-            pageIndicator.innerText = `${currentPage} / ${totalPages}`;
-            // Dịch chuyển sách ra giữa khi lật
-            if (window.innerWidth > 768) {
-                flipbookWrapper.style.transform = currentPage > 0 ? "translateX(50%)" : "translateX(0)";
-            }
-        }
-
-        // Events
-        document.getElementById("bookNext")?.addEventListener("click", () => flipPage(1));
-        document.getElementById("bookPrev")?.addEventListener("click", () => flipPage(-1));
-        
-        closeBookBtn?.addEventListener("click", () => {
-            bookModal.style.display = "none";
-            document.body.style.overflow = "auto";
-            flipbookWrapper.innerHTML = ''; // Burn the virtual DOM
-        });
-
-        // Hỗ trợ phím cứng
-        window.addEventListener("keydown", (e) => {
-            if (bookModal.style.display === "flex") {
-                if (e.key === "ArrowRight") flipPage(1);
-                if (e.key === "ArrowLeft") flipPage(-1);
-                if (e.key === "Escape") closeBookBtn.click();
-            }
-        });
-
-    } catch (error) {
-        console.error("Bookshelf Init Failed:", error);
-    }
 });
