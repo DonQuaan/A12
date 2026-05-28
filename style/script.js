@@ -1335,5 +1335,157 @@ document.addEventListener("DOMContentLoaded", () => {
               themeIcon.style.transform = "rotate(0deg)";
           }, 150);
       }
+    // ==================== HỆ THỐNG FLIPBOOK ĐỘNG (BẢN VÁ LỖI KIẾN TRÚC) ====================
+    // Vùng bảo vệ Try-Catch: Nếu Code này lỗi, website gốc của bạn VẪN SỐNG sót và bấm nút bình thường.
+    try {
+        const deskGrid = document.getElementById('deskGrid');
+        const flipbookModal = document.getElementById('flipbookModal');
+        const flipbookWrapper = document.getElementById('flipbookWrapper');
+        const closeFlipbook = document.querySelector('.close-flipbook');
+        
+        let isBookLoading = false; // Khóa an toàn chống click bừa bãi
+
+        const loadingText = document.createElement('div');
+        loadingText.className = 'fb-loading';
+        loadingText.innerText = 'Đang lục tìm ký ức...';
+        if (flipbookModal) flipbookModal.appendChild(loadingText);
+
+        const youthQuotes = [
+            "Thanh xuân là cơn mưa rào, dẫu cảm lạnh vẫn muốn tắm lại lần nữa.",
+            "Mỗi nụ cười ngày đó, giờ là kho báu vô giá.",
+            "Năm tháng trôi qua, chỉ có ánh mắt ấy là không đổi thay.",
+            "Tuổi 15 rực rỡ, ta đã có mọi thứ, kể cả sự ngây ngô.",
+            "Cảm ơn vì đã xuất hiện trong thanh xuân của tôi.",
+            "Góc sân trường ngày đó, còn vương mãi tiếng cười.",
+            "Tạm biệt nhé, những ngày tháng vô lo vô nghĩ."
+        ];
+
+        // DEFENSIVE PROGRAMMING: Kiểm tra sinh tử của biến 'members'
+        if (typeof members === 'undefined') {
+            console.error("⚠️ Red Team System Guard: Biến 'members' chưa được khởi tạo! Hãy đảm bảo đoạn code này nằm DƯỚI đoạn định nghĩa danh sách học sinh.");
+        } else if (deskGrid) {
+            // Chỉ chạy tính năng này khi hệ thống gốc đã sẵn sàng
+            const bookNames = members.map(m => m.name.split('-')[0].trim());
+
+            bookNames.forEach(name => {
+                const spine = document.createElement('div');
+                spine.className = 'book-spine';
+                spine.innerHTML = `<span>${name}</span>`;
+                spine.onclick = () => {
+                    if (!isBookLoading) openFlipbook(name); // Chỉ lật sách khi đã load xong quyển trước
+                };
+                deskGrid.appendChild(spine);
+            });
+        }
+
+        // Kỹ thuật quét ảnh bất đồng bộ an toàn với bộ nhớ
+        function probeImages(studentName) {
+            return new Promise(resolve => {
+                let validUrls = [];
+                let index = 1;
+                function checkNext() {
+                    let img = new Image();
+                    const url = `style/img/Bookmember/${studentName}/Anh (${index}).jpg`;
+                    img.onload = () => { validUrls.push(url); index++; checkNext(); };
+                    img.onerror = () => { 
+                        img.src = ""; // Cắt stream ngay lập tức
+                        img = null;   // Ép trình duyệt dọn rác, giải phóng RAM
+                        resolve(validUrls); 
+                    };
+                    img.src = url;
+                }
+                checkNext();
+            });
+        }
+
+        async function openFlipbook(studentName) {
+            isBookLoading = true;
+            if(flipbookModal) flipbookModal.style.display = 'flex';
+            loadingText.style.display = 'block';
+            if(flipbookWrapper) {
+                flipbookWrapper.innerHTML = ''; 
+                flipbookWrapper.style.transform = 'translateX(0)'; 
+            }
+
+            const imgUrls = await probeImages(studentName);
+            loadingText.style.display = 'none';
+            isBookLoading = false;
+
+            if (imgUrls.length === 0) {
+                if(flipbookWrapper) flipbookWrapper.innerHTML = `<div style="color:#fff; text-align:center; width:100%; margin-top:50%; font-family:'Inter', sans-serif;">Hòm thư của ${studentName} đang được số hóa...</div>`;
+                return;
+            }
+
+            let totalPages = Math.ceil(imgUrls.length / 2) + 1; 
+            let htmlContext = '';
+            let zIndexCounter = totalPages;
+
+            // Xây dựng trang Bìa
+            htmlContext += `
+                <div class="fb-page" style="z-index: ${zIndexCounter};" data-page="0">
+                    <div class="fb-front fb-cover"><h2>${studentName}</h2></div>
+                    <div class="fb-back">
+                        <div class="fb-img-container"><img src="${imgUrls[0]}" alt="Kỷ niệm"></div>
+                        <p class="fb-quote">"${youthQuotes[0 % youthQuotes.length]}"</p>
+                    </div>
+                </div>
+            `;
+            zIndexCounter--;
+
+            // Xây dựng các trang ruột bên trong
+            let imgIndex = 1;
+            for (let i = 1; i < totalPages; i++) {
+                const frontImg = imgUrls[imgIndex] ? `<div class="fb-img-container"><img src="${imgUrls[imgIndex]}" alt="Kỷ niệm"></div><p class="fb-quote">"${youthQuotes[imgIndex % youthQuotes.length]}"</p>` : '';
+                imgIndex++;
+                const backImg = imgUrls[imgIndex] ? `<div class="fb-img-container"><img src="${imgUrls[imgIndex]}" alt="Kỷ niệm"></div><p class="fb-quote">"${youthQuotes[imgIndex % youthQuotes.length]}"</p>` : '';
+                imgIndex++;
+
+                htmlContext += `
+                    <div class="fb-page" style="z-index: ${zIndexCounter};" data-page="${i}">
+                        <div class="fb-front">${frontImg}</div>
+                        <div class="fb-back">${backImg}</div>
+                    </div>
+                `;
+                zIndexCounter--;
+            }
+
+            if(flipbookWrapper) flipbookWrapper.innerHTML = htmlContext;
+
+            // Thuật toán lật sách đa lớp
+            const pages = document.querySelectorAll('.fb-page');
+            let currentPage = 0;
+
+            pages.forEach((page) => {
+                page.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    if (clickX > rect.width / 2) {
+                        if (currentPage < pages.length) {
+                            pages[currentPage].classList.add('flipped');
+                            pages[currentPage].style.zIndex = currentPage + 1;
+                            currentPage++;
+                            if(flipbookWrapper) flipbookWrapper.style.transform = `translateX(${rect.width / 2}px)`;
+                        }
+                    } else {
+                        if (currentPage > 0) {
+                            currentPage--;
+                            pages[currentPage].classList.remove('flipped');
+                            pages[currentPage].style.zIndex = pages.length - currentPage;
+                            if(currentPage === 0 && flipbookWrapper) flipbookWrapper.style.transform = 'translateX(0)';
+                        }
+                    }
+                });
+            });
+        }
+
+        if (closeFlipbook) {
+            closeFlipbook.addEventListener('click', () => {
+                if(flipbookModal) flipbookModal.style.display = 'none';
+                if(flipbookWrapper) flipbookWrapper.innerHTML = ''; // Đốt sách ngay khi đóng để xả RAM
+            });
+        }
+    } catch (error) {
+        console.error("⚠️ Red Team Guard đã cách ly thành công vùng lỗi Flipbook. Hệ thống chính vẫn hoạt động:", error);
+    }
   });
 });
