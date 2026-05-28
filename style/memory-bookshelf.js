@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Mảng Data chuẩn xác 26 học sinh (Không chứa GVCN, không trùng lặp)
     const folderNames = [
         "Đông Quân", "Bình Minh", "Bảo Nam", "Bảo Ngân", "Bảo Uyên", 
         "Chí Thành", "Cát Hồng", "Gia Bảo", "Gia Huy", "Hoàng Anh", 
@@ -22,91 +21,90 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentPage = 0;
     let totalPages = 0;
     let pagesDOM = [];
-    let isBookLoading = false;
-    let currentStreamId = 0; // Chìa khóa chống Race Condition
+    
+    // --- SMART PRELOAD QUEUE (Chống liệt nút) ---
+    const imageCache = {}; // Lưu trữ URL ảnh đã dò được: { "Đông Quân": ["url1", "url2"] }
+    const isFinished = {}; // Đánh dấu thư mục đã tải hết (gặp 404): { "Đông Quân": true }
+    let backgroundQueue = [...folderNames]; // Hàng đợi tải nền
+    let priorityStudent = null; // Cờ kích hoạt ưu tiên ép xung tải
+    
+    // Khởi tạo Dictionary Cache
+    folderNames.forEach(name => {
+        imageCache[name] = [];
+        isFinished[name] = false;
+    });
 
-    const getPastelColor = (index) => {
-        const hues = [210, 35, 10, 160, 280, 50, 320]; 
-        return `hsl(${hues[index % hues.length]}, 40%, 65%)`;
-    };
+    // Hàm tạo 1 Element sách
+    function createBookElement(name, styleNum, posture) {
+        const spine = document.createElement("div");
+        spine.className = `book-spine style-${styleNum} posture-${posture}`;
+        spine.innerHTML = `
+            <span class="spine-hover-label">${name}</span>
+            <span class="spine-text">${name}</span>
+        `;
+        spine.addEventListener("click", () => openBook(name));
+        return spine;
+    }
 
+    // --- RENDER 3 TẦNG KỆ THỰC TẾ ---
     if (bookshelfGrid) {
-        folderNames.forEach((folderName, index) => {
-            const spine = document.createElement("div");
-            spine.className = "book-spine animate-up";
-            spine.style.animationDelay = `${(index % 10) * 0.1}s`; 
-            spine.style.backgroundColor = getPastelColor(index);
-            spine.innerHTML = `<span class="spine-text">${folderName}</span>`;
-            
-            // ⚡ HOVER INTENT: Kích hoạt tải vào bộ nhớ đệm (Cache) 4 ảnh đầu khi di chuột
-            spine.addEventListener("mouseenter", () => {
-                if (!spine.dataset.preloaded) {
-                    spine.dataset.preloaded = "true";
-                    for (let i = 1; i <= 4; i++) {
-                        const img = new Image();
-                        img.src = `style/img/Bookmember/${folderName}/Anh (${i}).webp`;
-                    }
+        bookshelfGrid.innerHTML = ''; 
+        // Trộn ngẫu nhiên 26 người
+        const shuffled = [...folderNames].sort(() => 0.5 - Math.random());
+        
+        // Chia 3 tầng (9, 9, 8)
+        const shelves = [ shuffled.slice(0, 9), shuffled.slice(9, 18), shuffled.slice(18, 26) ];
+        
+        const postures = ['upright', 'upright', 'upright', 'lean-left', 'lean-right'];
+
+        shelves.forEach((shelfStudents, shelfIndex) => {
+            const shelfRow = document.createElement("div");
+            shelfRow.className = "shelf-row";
+
+            let i = 0;
+            while (i < shelfStudents.length) {
+                // Tỉ lệ 15% tạo một cụm sách nằm ngang (Stack 2 cuốn)
+                if (Math.random() < 0.15 && i < shelfStudents.length - 1) {
+                    const stack = document.createElement("div");
+                    stack.className = "book-stack";
+                    
+                    const name1 = shelfStudents[i];
+                    const name2 = shelfStudents[i+1];
+                    const s1 = Math.floor(Math.random() * 10) + 1;
+                    const s2 = Math.floor(Math.random() * 10) + 1;
+                    
+                    stack.appendChild(createBookElement(name1, s1, 'horizontal'));
+                    stack.appendChild(createBookElement(name2, s2, 'horizontal'));
+                    shelfRow.appendChild(stack);
+                    i += 2;
+                } else {
+                    const name = shelfStudents[i];
+                    const style = Math.floor(Math.random() * 10) + 1;
+                    const post = postures[Math.floor(Math.random() * postures.length)];
+                    shelfRow.appendChild(createBookElement(name, style, post));
+                    i++;
                 }
-            });
 
-            spine.addEventListener("click", () => openBook(folderName));
-            bookshelfGrid.appendChild(spine);
-        });
-    }
-
-    async function openBook(folderName) {
-        if (isBookLoading) return;
-        isBookLoading = true;
-        
-        currentStreamId++; // Tạo ID mới để cắt đứt các luồng tải sách cũ (nếu có)
-        const myStreamId = currentStreamId; 
-        
-        bookModal.classList.add("modal-active");
-        bookScene.style.display = "none";
-        bookControls.style.display = "none";
-        bookLoader.style.display = "block";
-        document.body.style.overflow = "hidden";
-
-        flipbookWrapper.innerHTML = ''; 
-        pagesDOM = [];
-        currentPage = 0;
-        totalPages = 0;
-
-        const folderPath = `style/img/Bookmember/${folderName}`;
-        
-        // BƯỚC 1: Dò tìm đồng thời 4 ảnh đầu tiên (Nhanh x4 lần)
-        let initialPromises = [];
-        for (let i = 1; i <= 4; i++) {
-            initialPromises.push(checkImageExistence(`${folderPath}/Anh (${i}).webp`));
-        }
-        
-        const initialResults = await Promise.all(initialPromises);
-        let has404 = false;
-        
-        for (let res of initialResults) {
-            if (res.exists) {
-                appendPageToBook(res.url, folderName);
-            } else {
-                has404 = true;
-                break;
+                // Random chèn chậu cây trang trí
+                if (Math.random() < 0.25) {
+                    const plant = document.createElement("div");
+                    plant.className = "decor-plant";
+                    shelfRow.appendChild(plant);
+                }
             }
-        }
 
-        if (totalPages === 0) {
-            appendPageToBook('https://i.postimg.cc/P5nMWJnM/Logo.png', folderName);
-        }
+            const board = document.createElement("div");
+            board.className = "shelf-board-row";
+            shelfRow.appendChild(board);
+            
+            bookshelfGrid.appendChild(shelfRow);
+        });
 
-        bookLoader.style.display = "none";
-        bookScene.style.display = "flex";
-        bookControls.style.display = "flex";
-        isBookLoading = false;
-
-        // BƯỚC 2: STREAMING NGẦM (Tải dần số ảnh còn lại khi user đang xem 4 trang đầu)
-        if (!has404) {
-            streamRemainingImages(folderPath, folderName, 5, myStreamId);
-        }
+        // Bắt đầu chạy tiến trình tải ngầm cực nhẹ
+        setTimeout(processBackgroundQueue, 2000); 
     }
 
+    // --- ENGINE XỬ LÝ ẢNH (Không gây treo máy) ---
     function checkImageExistence(url) {
         return new Promise((resolve) => {
             const img = new Image();
@@ -116,71 +114,109 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Engine đa luồng tải ngầm ảnh không gây giật lag
-    async function streamRemainingImages(folderPath, studentName, startIndex, streamId) {
-        let i = startIndex;
-        let keepGoing = true;
-        
-        while (keepGoing && currentStreamId === streamId) {
-            // Tải Batch 3 hình / mẻ
-            let batch = [];
-            for (let j = 0; j < 3; j++) {
-                batch.push(checkImageExistence(`${folderPath}/Anh (${i + j}).webp`));
-            }
-            const results = await Promise.all(batch);
-            
-            for (let res of results) {
-                if (currentStreamId !== streamId) return; // Nếu đổi sách, hủy luồng ngay lập tức
-                if (res.exists) {
-                    appendPageToBook(res.url, studentName);
-                } else {
-                    keepGoing = false;
-                    break;
-                }
-            }
-            i += 3;
+    async function processBackgroundQueue() {
+        if (backgroundQueue.length === 0) return; // Đã quét xong cả lớp
+
+        // Nếu có ai đó click vào sách, DỪNG QUÉT NỀN để nhường 100% băng thông cho cuốn đó
+        if (priorityStudent) {
+            setTimeout(processBackgroundQueue, 500);
+            return; 
         }
+
+        const student = backgroundQueue[0];
+        const nextIndex = imageCache[student].length + 1;
+        const url = `style/img/Bookmember/${student}/Anh (${nextIndex}).webp`;
+
+        const result = await checkImageExistence(url);
+        
+        if (result.exists) {
+            imageCache[student].push(result.url); // Lưu vào cache
+            // Vẫn quét tiếp người này ở vòng lặp sau
+        } else {
+            isFinished[student] = true; // Hết ảnh
+            backgroundQueue.shift(); // Xóa người này khỏi Queue
+        }
+
+        // Đợi 200ms cho mượt rồi lặp lại
+        setTimeout(processBackgroundQueue, 200); 
     }
 
-    // Cơ chế động: Cứ nạp được 1 ảnh vào là tái cấu trúc Z-index ngay
-    function appendPageToBook(imgSrc, studentName) {
-        const index = totalPages;
-        totalPages++;
+    // --- LOGIC MỞ SÁCH ---
+    async function openBook(folderName) {
+        bookModal.classList.add("modal-active");
+        bookScene.style.display = "none";
+        bookControls.style.display = "none";
+        bookLoader.style.display = "block";
+        document.body.style.overflow = "hidden";
+
+        // Kích hoạt cờ ưu tiên. Chặn mọi tiến trình ngầm khác.
+        priorityStudent = folderName;
         
-        const page = document.createElement("div");
-        page.className = "book-page";
+        // Quét tốc độ cao cho đến khi báo Finished
+        let index = imageCache[folderName].length + 1;
+        while (!isFinished[folderName]) {
+            const url = `style/img/Bookmember/${folderName}/Anh (${index}).webp`;
+            const result = await checkImageExistence(url);
+            if (result.exists) {
+                imageCache[folderName].push(result.url);
+                index++;
+            } else {
+                isFinished[folderName] = true;
+            }
+        }
+
+        // Sau khi đã ép xung tải xong, nhả cờ ưu tiên ra
+        priorityStudent = null;
+
+        // Render toàn bộ ảnh từ Cache ra UI
+        buildFlipbookDOM(imageCache[folderName], folderName.trim());
         
-        page.innerHTML = `
-            <div class="page-front">
-                <div class="page-content">
-                    <div class="polaroid">
-                        <img src="${imgSrc}" loading="lazy" alt="${studentName}">
+        bookLoader.style.display = "none";
+        bookScene.style.display = "flex";
+        bookControls.style.display = "flex";
+    }
+
+    function buildFlipbookDOM(images, studentName) {
+        flipbookWrapper.innerHTML = ''; 
+        pagesDOM = [];
+        currentPage = 0;
+        
+        if (images.length === 0) {
+            images = ['https://i.postimg.cc/P5nMWJnM/Logo.png']; 
+        }
+
+        totalPages = images.length;
+        
+        images.forEach((imgSrc, i) => {
+            const page = document.createElement("div");
+            page.className = "book-page";
+            page.style.zIndex = totalPages - i; 
+            
+            page.innerHTML = `
+                <div class="page-front">
+                    <div class="page-content">
+                        <div class="polaroid">
+                            <img src="${imgSrc}" loading="lazy" alt="${studentName}">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="page-back">
-                <div class="page-content quote-page">
-                    <p>"Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."</p>
-                    <span style="display:block; margin-top:20px; font-size:1.2rem; font-family:'Inter', sans-serif;">- ${studentName} -</span>
+                <div class="page-back">
+                    <div class="page-content quote-page">
+                        <p>"Thanh xuân của chúng ta cất gọn trong ngăn bàn đầy bụi phấn. Những kỷ niệm này sẽ sống mãi."</p>
+                        <span style="display:block; margin-top:20px; font-size:1.2rem; font-family:'Inter', sans-serif;">- ${studentName} -</span>
+                    </div>
                 </div>
-            </div>
-        `;
-        
-        page.addEventListener("click", () => {
-            if (page.classList.contains("page-flipped")) flipPage(-1);
-            else flipPage(1);
+            `;
+            
+            page.addEventListener("click", () => {
+                if (page.classList.contains("page-flipped")) flipPage(-1);
+                else flipPage(1);
+            });
+
+            flipbookWrapper.appendChild(page);
+            pagesDOM.push(page);
         });
 
-        // Tính toán lại tọa độ lớp (Z) của tất cả các trang nằm im
-        pagesDOM.forEach((p, idx) => {
-            if (!p.classList.contains("page-flipped")) {
-                p.style.zIndex = totalPages - idx;
-            }
-        });
-        page.style.zIndex = totalPages - index;
-
-        flipbookWrapper.appendChild(page);
-        pagesDOM.push(page);
         updateBookUI();
     }
 
@@ -208,7 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("bookPrev")?.addEventListener("click", () => flipPage(-1));
     
     closeBookBtn?.addEventListener("click", () => {
-        currentStreamId++; // Vô hiệu hóa luồng tải ngầm hiện tại
         bookModal.classList.remove("modal-active");
         document.body.style.overflow = "auto";
         flipbookWrapper.innerHTML = ''; 
